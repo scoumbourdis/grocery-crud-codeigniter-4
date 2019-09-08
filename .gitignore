@@ -45,3 +45,7 @@ application/views/errors/*
 index.php
 license.txt
 bootstrap-v4
+_support
+writable
+favicon.ico
+robots.txt
