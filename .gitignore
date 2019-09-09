@@ -53,3 +53,8 @@ Home.php
 BaseController.php
 app/Views/errors
 welcome_message.php
+.env
+phpunit.xml.dist
+Common.php
+app/index.html
+spark

@@ -3380,8 +3380,9 @@ class grocery_CRUD_States extends grocery_CRUD_Layout
 
         $function_name = $this->get_method_name();
 
-        if($function_name == 'index' && !in_array('index',$ci->uri->segments))
+        if($function_name == 'index' && !in_array('index', $segments)) {
             $segment_position++;
+        }
 
         $first_parameter = isset($segments[$segment_position+1]) ? $segments[$segment_position+1] : null;
         $second_parameter = isset($segments[$segment_position+2]) ? $segments[$segment_position+2] : null;
