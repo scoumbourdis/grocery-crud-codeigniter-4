@@ -431,7 +431,7 @@ class GroceryCrudModel extends Model {
     function get_field_types_basic_table()
     {
     	$db_field_types = array();
-    	foreach($this->db->query("SHOW COLUMNS FROM `{$this->table_name}`")->result() as $db_field_type)
+    	foreach($this->db->query("SHOW COLUMNS FROM `{$this->table_name}`")->getResult() as $db_field_type)
     	{
     		$type = explode("(",$db_field_type->Type);
     		$db_type = $type[0];
@@ -458,7 +458,7 @@ class GroceryCrudModel extends Model {
     		$db_field_types[$db_field_type->Field]['db_extra'] = $db_field_type->Extra;
     	}
 
-    	$results = $this->db->field_data($this->table_name);
+    	$results = $this->db->getFieldData($this->table_name);
     	foreach($results as $num => $row)
     	{
     		$row = (array)$row;
