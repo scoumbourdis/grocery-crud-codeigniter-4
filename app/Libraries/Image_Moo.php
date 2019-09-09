@@ -1,4 +1,4 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php namespace App\Libraries;
 /*
  * Image_Moo library
  *
@@ -7,7 +7,6 @@
  * @license		MIT License
  * @author		Matthew Augier, aka Mat-Moo
  * @link		http://www.dps.uk.com
- * @docu		http://todo :)
  * @email		matthew@dps.uk.com
  *
  * @file		image_moo.php
@@ -60,7 +59,7 @@
  * TO DO
  *
  * THANKS
- * Matjaž for poiting out the save_pa bug (should of tested it!)
+ * Matjaï¿½ for poiting out the save_pa bug (should of tested it!)
  * Cahva for posting yet another bug in the save_pa (Man I can be silly sometimes!)
  * Cole spotting the resize flaw and providing a fix
  *
