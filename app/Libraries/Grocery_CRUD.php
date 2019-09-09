@@ -4556,33 +4556,30 @@ class Grocery_CRUD extends grocery_CRUD_States
 
 	protected function _initialize_helpers()
 	{
-		$ci = &get_instance();
-
-		$ci->load->helper('url');
-		$ci->load->helper('form');
+		helper('url');
+		helper('form');
 	}
 
 	protected function _initialize_variables()
 	{
-		$ci = &get_instance();
-		$ci->load->config('grocery_crud');
-
 		$this->config = (object)array();
 
+		$config = new \Config\GroceryCrud();
+
 		/** Initialize all the config variables into this object */
-		$this->config->default_language 	= $ci->config->item('grocery_crud_default_language');
-		$this->config->date_format 			= $ci->config->item('grocery_crud_date_format');
-		$this->config->default_per_page		= $ci->config->item('grocery_crud_default_per_page');
-		$this->config->file_upload_allow_file_types	= $ci->config->item('grocery_crud_file_upload_allow_file_types');
-		$this->config->file_upload_max_file_size	= $ci->config->item('grocery_crud_file_upload_max_file_size');
-		$this->config->default_text_editor	= $ci->config->item('grocery_crud_default_text_editor');
-		$this->config->text_editor_type		= $ci->config->item('grocery_crud_text_editor_type');
-		$this->config->character_limiter	= $ci->config->item('grocery_crud_character_limiter');
-		$this->config->dialog_forms			= false;
-		$this->config->paging_options		= $ci->config->item('grocery_crud_paging_options');
-        $this->config->default_theme        = $ci->config->item('grocery_crud_default_theme');
-        $this->config->environment          = $ci->config->item('grocery_crud_environment');
-        $this->config->xss_clean            = $ci->config->item('grocery_crud_xss_clean');
+        $this->config->default_language 	= $config->default_language;
+        $this->config->date_format 			= $config->date_format;
+        $this->config->default_per_page		= $config->default_per_page;
+        $this->config->file_upload_allow_file_types	= $config->file_upload_allow_file_types;
+        $this->config->file_upload_max_file_size	= $config->file_upload_max_file_size;
+        $this->config->default_text_editor	= $config->default_text_editor;
+        $this->config->text_editor_type		= $config->text_editor_type;
+        $this->config->character_limiter	= $config->character_limiter;
+        $this->config->dialog_forms			= false;
+        $this->config->paging_options		= $config->paging_options;
+        $this->config->default_theme        = $config->default_theme;
+        $this->config->environment          = $config->environment;
+        $this->config->xss_clean            = $config->xss_clean;
 
 		/** Initialize default paths */
 		$this->default_javascript_path				= $this->default_assets_path.'/js';
