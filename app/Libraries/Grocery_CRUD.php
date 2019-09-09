@@ -480,10 +480,7 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
 
 	protected function set_default_Model()
 	{
-		$ci = &get_instance();
-		$ci->load->model('Grocery_crud_model');
-
-		$this->basic_model = new Grocery_crud_model();
+		$this->basic_model = new \App\Models\GroceryCrudModel();
 	}
 
 	protected function get_total_results()
@@ -4615,8 +4612,9 @@ class Grocery_CRUD extends grocery_CRUD_States
 		$this->_load_language();
 		$this->state_code = $this->getStateCode();
 
-		if($this->basic_model === null)
-			$this->set_default_Model();
+		if ($this->basic_model === null) {
+            $this->set_default_Model();
+        }
 
 		$this->set_basic_db_table($this->get_table());
 

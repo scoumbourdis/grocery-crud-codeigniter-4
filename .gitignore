@@ -58,3 +58,5 @@ phpunit.xml.dist
 Common.php
 app/index.html
 spark
+app/Database
+app/Filters
