@@ -4578,7 +4578,7 @@ class Grocery_CRUD extends grocery_CRUD_States
 		$this->config->default_text_editor	= $ci->config->item('grocery_crud_default_text_editor');
 		$this->config->text_editor_type		= $ci->config->item('grocery_crud_text_editor_type');
 		$this->config->character_limiter	= $ci->config->item('grocery_crud_character_limiter');
-		$this->config->dialog_forms			= $ci->config->item('grocery_crud_dialog_forms');
+		$this->config->dialog_forms			= false;
 		$this->config->paging_options		= $ci->config->item('grocery_crud_paging_options');
         $this->config->default_theme        = $ci->config->item('grocery_crud_default_theme');
         $this->config->environment          = $ci->config->item('grocery_crud_environment');
