@@ -49,3 +49,5 @@ _support
 writable
 favicon.ico
 robots.txt
+Home.php
+BaseController.php

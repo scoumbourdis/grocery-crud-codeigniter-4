@@ -4,11 +4,20 @@ use App\Libraries\Grocery_CRUD;
 
 class Example extends BaseController
 {
-	public function index()
+	public function customers()
 	{
-	    new Grocery_CRUD();
+	    $crud = new Grocery_CRUD();
 
-		return view('welcome_message');
+	    $crud->set_table('customers');
+
+	    $output = $crud->render();
+
+		return $this->_example_output($output);
 	}
+
+    public function _example_output($output = null) {
+        return view('example', $output);
+    }
+
 
 }
