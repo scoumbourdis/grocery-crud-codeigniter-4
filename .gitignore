@@ -51,3 +51,5 @@ favicon.ico
 robots.txt
 Home.php
 BaseController.php
+app/Views/errors
+welcome_message.php
