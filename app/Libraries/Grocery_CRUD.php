@@ -3362,33 +3362,32 @@ class grocery_CRUD_States extends grocery_CRUD_Layout
 		return $state_url;
 	}
 
-	protected function get_state_info_from_url()
-	{
-		$ci = &get_instance();
+    protected function get_state_info_from_url()
+    {
+        $segments = explode('/', uri_string());
 
-		$segment_position = count($ci->uri->segments) + 1;
-		$operation = 'list';
+        $segment_position = count($segments) + 1;
+        $operation = 'list';
 
-		$segements = $ci->uri->segments;
-		foreach($segements as $num => $value)
-		{
-			if($value != 'unknown' && in_array($value, $this->states))
-			{
-				$segment_position = (int)$num;
-				$operation = $value; //I don't have a "break" here because I want to ensure that is the LAST segment with name that is in the array.
-			}
-		}
+        foreach($segments as $num => $value)
+        {
+            if($value != 'unknown' && in_array($value, $this->states))
+            {
+                $segment_position = (int)$num;
+                $operation = $value; //I don't have a "break" here because I want to ensure that is the LAST segment with name that is in the array.
+            }
+        }
 
-		$function_name = $this->get_method_name();
+        $function_name = $this->get_method_name();
 
-		if($function_name == 'index' && !in_array('index',$ci->uri->segments))
-			$segment_position++;
+        if($function_name == 'index' && !in_array('index',$ci->uri->segments))
+            $segment_position++;
 
-		$first_parameter = isset($segements[$segment_position+1]) ? $segements[$segment_position+1] : null;
-		$second_parameter = isset($segements[$segment_position+2]) ? $segements[$segment_position+2] : null;
+        $first_parameter = isset($segments[$segment_position+1]) ? $segments[$segment_position+1] : null;
+        $second_parameter = isset($segments[$segment_position+2]) ? $segments[$segment_position+2] : null;
 
-		return (object)array('segment_position' => $segment_position, 'operation' => $operation, 'first_parameter' => $first_parameter, 'second_parameter' => $second_parameter);
-	}
+        return (object)array('segment_position' => $segment_position, 'operation' => $operation, 'first_parameter' => $first_parameter, 'second_parameter' => $second_parameter);
+    }
 
 	protected function get_method_hash()
 	{
