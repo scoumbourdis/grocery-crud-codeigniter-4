@@ -3369,19 +3369,13 @@ class grocery_CRUD_States extends grocery_CRUD_Layout
         $segment_position = count($segments) + 1;
         $operation = 'list';
 
-        foreach($segments as $num => $value)
-        {
-            if($value != 'unknown' && in_array($value, $this->states))
-            {
+        foreach($segments as $num => $value) {
+            if($value != 'unknown' && in_array($value, $this->states)) {
+                // We want to ensure that is the LAST segment with name that is in the array.
+                // That's why we are not stopping the foreach statement
                 $segment_position = (int)$num;
-                $operation = $value; //I don't have a "break" here because I want to ensure that is the LAST segment with name that is in the array.
+                $operation = $value;
             }
-        }
-
-        $function_name = $this->get_method_name();
-
-        if($function_name == 'index' && !in_array('index', $segments)) {
-            $segment_position++;
         }
 
         $first_parameter = isset($segments[$segment_position+1]) ? $segments[$segment_position+1] : null;
