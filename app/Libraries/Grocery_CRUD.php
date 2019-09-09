@@ -485,6 +485,8 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
 
 	protected function get_total_results()
 	{
+        $this->basic_model->setBuilder($this->basic_db_table);
+
 		if(!empty($this->where))
 			foreach($this->where as $where)
 				$this->basic_model->where($where[0],$where[1],$where[2]);
@@ -1310,6 +1312,8 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
 
 	protected function get_list()
 	{
+        $this->basic_model->setBuilder($this->basic_db_table);
+
 		if(!empty($this->order_by))
 			$this->basic_model->order_by($this->order_by[0],$this->order_by[1]);
 
@@ -3333,24 +3337,19 @@ class grocery_CRUD_States extends grocery_CRUD_Layout
 		} else {
 			//Complicated scenario. The crud_url_path is not specified so we are
 			//trying to understand what is going on from the URL.
-			$ci = &get_instance();
-
 			$segment_object = $this->get_state_info_from_url();
-			$method_name = $this->get_method_name();
 			$segment_position = $segment_object->segment_position;
 
 			$state_url_array = array();
+            $segments = explode('/', uri_string());
 
-		    if( sizeof($ci->uri->segments) > 0 ) {
-		      foreach($ci->uri->segments as $num => $value)
-		      {
+		    if( sizeof($segments) > 0 ) {
+		      foreach($segments as $num => $value) {
 		        $state_url_array[$num] = $value;
-		        if($num == ($segment_position - 1))
-		          break;
+		        if($num == ($segment_position - 1)) {
+                    break;
+                }
 		      }
-
-		      if( $method_name == 'index' && !in_array( 'index', $state_url_array ) ) //there is a scenario that you don't have the index to your url
-		        $state_url_array[$num+1] = 'index';
 		    }
 
 			$state_url =  site_url(implode('/',$state_url_array).'/'.$url);
@@ -3378,15 +3377,28 @@ class grocery_CRUD_States extends grocery_CRUD_Layout
         $first_parameter = isset($segments[$segment_position+1]) ? $segments[$segment_position+1] : null;
         $second_parameter = isset($segments[$segment_position+2]) ? $segments[$segment_position+2] : null;
 
-        return (object)array('segment_position' => $segment_position, 'operation' => $operation, 'first_parameter' => $first_parameter, 'second_parameter' => $second_parameter);
+        return (object)[
+            'segment_position' => $segment_position,
+            'operation' => $operation,
+            'first_parameter' => $first_parameter,
+            'second_parameter' => $second_parameter
+        ];
+    }
+
+    protected function getUriSegment($position) {
+        $segments = explode('/', uri_string());
+
+        if (array_key_exists($position, $segments)) {
+            return $segments[$position];
+        }
+
+        return false;
     }
 
 	protected function get_method_hash()
 	{
-		$ci = &get_instance();
-
 		$state_info = $this->get_state_info_from_url();
-		$extra_values = $ci->uri->segment($state_info->segment_position - 1) != $this->get_method_name() ? $ci->uri->segment($state_info->segment_position - 1) : '';
+		$extra_values = $this->getUriSegment($state_info->segment_position - 1) != $this->get_method_name() ? $this->getUriSegment($state_info->segment_position - 1) : '';
 
 		return $this->crud_url_path !== null
 					? md5($this->crud_url_path)

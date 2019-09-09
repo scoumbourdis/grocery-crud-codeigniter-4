@@ -36,10 +36,15 @@ class GroceryCrudModel extends Model {
 	protected $relation = array();
 	protected $relation_n_n = array();
 	protected $primary_keys = array();
+	protected $builder = null;
 
     function db_table_exists($table_name = null)
     {
     	return $this->db->tableExists($table_name);
+    }
+
+    public function setBuilder($tableName) {
+        $this->builder = $this->db->table($tableName);
     }
 
     function get_list()
@@ -79,9 +84,11 @@ class GroceryCrudModel extends Model {
 			$select = $this->relation_n_n_queries($select);
     	}
 
-    	$this->db->select($select, false);
+        $this->builder = $this->builder->select($select, false);
 
-    	$results = $this->db->get($this->table_name)->result();
+    	$results = $this->builder->get()->getResult();
+
+    	$this->builder = null;
 
     	return $results;
     }
@@ -167,9 +174,9 @@ class GroceryCrudModel extends Model {
     	$this->db->or_like($field, $match, $side);
     }
 
-    function limit($value, $offset = '')
+    function limit($value, $offset = null)
     {
-    	$this->db->limit( $value , $offset );
+        $this->builder = $this->builder->limit( $value , $offset );
     }
 
     function get_total_results()
@@ -183,12 +190,14 @@ class GroceryCrudModel extends Model {
     		$select = "{$this->table_name}." . $key;
     		$select = $this->relation_n_n_queries($select);
 
-    		$this->db->select($select,false);
-    	} else {
-            $this->db->select($this->table_name . '.' . $key);
-        }
+    		$this->db->select($select, false);
+    	}
         
-        return $this->db->get($this->table_name)->num_rows();
+        $totalResults = $this->builder->countAllResults($this->table_name);
+
+        $this->builder = null;
+
+        return $totalResults;
     }
 
     function set_basic_table($table_name = null)
