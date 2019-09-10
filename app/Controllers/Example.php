@@ -1,12 +1,12 @@
 <?php namespace App\Controllers;
 
-use App\Libraries\Grocery_CRUD;
+use App\Libraries\GroceryCrud;
 
 class Example extends BaseController
 {
 	public function customers()
 	{
-	    $crud = new Grocery_CRUD();
+	    $crud = new GroceryCrud();
 
 	    $crud->set_table('customers');
 
@@ -16,7 +16,7 @@ class Example extends BaseController
 	}
 
     public function _example_output($output = null) {
-        return view('example', $output);
+        return view('example', (array)$output);
     }
 
 
