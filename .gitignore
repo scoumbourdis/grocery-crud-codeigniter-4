@@ -60,3 +60,7 @@ app/index.html
 spark
 app/Database
 app/Filters
+app/Config/Boot
+app/ThirdParty
+app/Language
+app/Helpers

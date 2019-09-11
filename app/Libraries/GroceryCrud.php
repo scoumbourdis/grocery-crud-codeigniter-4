@@ -1314,8 +1314,9 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
 	{
         $this->basic_model->setBuilder($this->basic_db_table);
 
-		if(!empty($this->order_by))
-			$this->basic_model->order_by($this->order_by[0],$this->order_by[1]);
+		if(!empty($this->order_by)) {
+            $this->basic_model->order_by($this->order_by[0], $this->order_by[1]);
+        }
 
 		if(!empty($this->where))
 			foreach($this->where as $where)

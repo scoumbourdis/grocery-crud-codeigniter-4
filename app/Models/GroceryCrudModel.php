@@ -141,7 +141,7 @@ class GroceryCrudModel extends Model {
 
     function order_by($order_by , $direction)
     {
-    	$this->db->order_by( $order_by , $direction );
+    	$this->builder->orderBy($order_by , $direction);
     }
 
     function where($key, $value = NULL, $escape = TRUE)
