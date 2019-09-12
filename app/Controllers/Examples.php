@@ -9,7 +9,6 @@ class Examples extends BaseController
 	    $crud = new GroceryCrud();
 
 	    $crud->set_table('customers');
-	    $crud->columns(['customer_name', 'contact_last_name', 'contact_first_name', 'notes', 'email']);
 
 	    $output = $crud->render();
 
