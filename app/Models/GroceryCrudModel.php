@@ -146,32 +146,32 @@ class GroceryCrudModel extends Model {
 
     function where($key, $value = NULL, $escape = TRUE)
     {
-    	$this->db->where( $key, $value, $escape);
+    	$this->builder->where( $key, $value, $escape);
     }
 
     function or_where($key, $value = NULL, $escape = TRUE)
     {
-    	$this->db->or_where( $key, $value, $escape);
+    	$this->builder->or_where( $key, $value, $escape);
     }
 
     function having($key, $value = NULL, $escape = TRUE)
     {
-    	$this->db->having( $key, $value, $escape);
+    	$this->builder->having( $key, $value, $escape);
     }
 
     function or_having($key, $value = NULL, $escape = TRUE)
     {
-    	$this->db->or_having( $key, $value, $escape);
+    	$this->builder->or_having( $key, $value, $escape);
     }
 
     function like($field, $match = '', $side = 'both')
     {
-    	$this->db->like($field, $match, $side);
+    	$this->builder->like($field, $match, $side);
     }
 
     function or_like($field, $match = '', $side = 'both')
     {
-    	$this->db->or_like($field, $match, $side);
+    	$this->builder->or_like($field, $match, $side);
     }
 
     function limit($value, $offset = null)
@@ -214,8 +214,10 @@ class GroceryCrudModel extends Model {
     function get_edit_values($primary_key_value)
     {
     	$primary_key_field = $this->get_primary_key();
-    	$this->db->where($primary_key_field,$primary_key_value);
-    	$result = $this->db->get($this->table_name)->row();
+    	$result = $this->builder
+            ->where($primary_key_field, $primary_key_value)
+            ->get()
+            ->getRow();
     	return $result;
     }
 
@@ -487,15 +489,14 @@ class GroceryCrudModel extends Model {
     function db_update($post_array, $primary_key_value)
     {
     	$primary_key_field = $this->get_primary_key();
-    	return $this->db->update($this->table_name,$post_array, array( $primary_key_field => $primary_key_value));
+    	return $this->db->table($this->table_name)->update($post_array, array( $primary_key_field => $primary_key_value));
     }
 
     function db_insert($post_array)
     {
-    	$insert = $this->db->insert($this->table_name,$post_array);
-    	if($insert)
-    	{
-    		return $this->db->insert_id();
+    	$insert = $this->db->table($this->table_name)->insert($post_array);
+    	if($insert) {
+    		return $this->db->insertID();
     	}
     	return false;
     }
@@ -504,8 +505,9 @@ class GroceryCrudModel extends Model {
     {
     	$primary_key_field = $this->get_primary_key();
 
-    	if($primary_key_field === false)
-    		return false;
+    	if($primary_key_field === false) {
+            return false;
+        }
 
     	$this->db->limit(1);
     	$this->db->delete($this->table_name,array( $primary_key_field => $primary_key_value));

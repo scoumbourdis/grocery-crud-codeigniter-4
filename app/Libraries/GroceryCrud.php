@@ -1318,13 +1318,18 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
             $this->basic_model->order_by($this->order_by[0], $this->order_by[1]);
         }
 
-		if(!empty($this->where))
-			foreach($this->where as $where)
-				$this->basic_model->where($where[0],$where[1],$where[2]);
+		if(!empty($this->where)) {
+            foreach($this->where as $where) {
+                $this->basic_model->where($where[0],$where[1],$where[2]);
+            }
 
-		if(!empty($this->or_where))
-			foreach($this->or_where as $or_where)
-				$this->basic_model->or_where($or_where[0],$or_where[1],$or_where[2]);
+        }
+
+		if(!empty($this->or_where)) {
+            foreach($this->or_where as $or_where) {
+                $this->basic_model->or_where($or_where[0],$or_where[1],$or_where[2]);
+            }
+        }
 
 		if(!empty($this->like))
 			foreach($this->like as $like)
@@ -1387,6 +1392,7 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
 
 	protected function get_edit_values($primary_key_value)
 	{
+        $this->basic_model->setBuilder($this->basic_db_table);
 		$values = $this->basic_model->get_edit_values($primary_key_value);
 
 		if(!empty($this->relation_n_n))
@@ -1402,6 +1408,7 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
 
     protected function get_clone_values($primary_key_value)
     {
+        $this->basic_model->setBuilder($this->basic_db_table);
         $values = $this->basic_model->get_edit_values($primary_key_value);
 
         $types 	= $this->get_field_types();
