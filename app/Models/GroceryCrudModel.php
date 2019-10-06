@@ -509,8 +509,8 @@ class GroceryCrudModel extends Model {
             return false;
         }
 
-    	$this->db->limit(1);
-    	$this->db->delete($this->table_name,array( $primary_key_field => $primary_key_value));
+    	$this->db->table($this->table_name)->delete(array( $primary_key_field => $primary_key_value));
+
     	if( $this->db->affected_rows() != 1)
     		return false;
     	else

@@ -1670,6 +1670,9 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 		$data->unset_export			= $this->unset_export;
 		$data->unset_print			= $this->unset_print;
 
+		$data->jquery_js            = GroceryCrud::JQUERY;
+		$data->grocery_crud_version = GroceryCrud::VERSION;
+
 		$default_per_page = $this->config->default_per_page;
 		$data->paging_options = $this->config->paging_options;
 		$data->default_per_page		= is_numeric($default_per_page) && $default_per_page >1 && in_array($default_per_page,$data->paging_options)? $default_per_page : 25;
@@ -3360,7 +3363,9 @@ class grocery_CRUD_States extends grocery_CRUD_Layout
 		      }
 		    }
 
-			$state_url =  site_url(implode('/',$state_url_array).'/'.$url);
+		    $operation = $url !== '' ? '/' . $url : '';
+
+			$state_url =  site_url(implode('/',$state_url_array) . $operation);
 		}
 
 		return $state_url;
@@ -3585,7 +3590,7 @@ class GroceryCrud extends grocery_CRUD_States
 	 *
 	 * @var	string
 	 */
-	const	VERSION = "1.6.1";
+	const	VERSION = "1.6.3";
 
 	const	JQUERY 			= "jquery-1.11.1.min.js";
 	const	JQUERY_UI_JS 	= "jquery-ui-1.10.3.custom.min.js";
