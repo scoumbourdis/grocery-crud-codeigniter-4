@@ -1672,6 +1672,7 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 
 		$data->jquery_js            = GroceryCrud::JQUERY;
 		$data->grocery_crud_version = GroceryCrud::VERSION;
+		$data->csrf_cookie_name     = '';
 
 		$default_per_page = $this->config->default_per_page;
 		$data->paging_options = $this->config->paging_options;
