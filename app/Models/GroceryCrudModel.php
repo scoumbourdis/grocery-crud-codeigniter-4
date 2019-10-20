@@ -505,16 +505,13 @@ class GroceryCrudModel extends Model {
     {
     	$primary_key_field = $this->get_primary_key();
 
-    	if($primary_key_field === false) {
+    	if($primary_key_field === false || empty($primary_key_value)) {
             return false;
         }
 
     	$this->db->table($this->table_name)->delete(array( $primary_key_field => $primary_key_value));
 
-    	if( $this->db->affected_rows() != 1)
-    		return false;
-    	else
-    		return true;
+        return true;
     }
 
     function db_file_delete($field_name, $filename)
