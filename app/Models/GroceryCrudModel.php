@@ -587,7 +587,7 @@ class GroceryCrudModel extends Model {
 
     function escape_str($value)
     {
-    	return $this->db->escape_str($value);
+    	return $this->db->escape($value);
     }
 
 }

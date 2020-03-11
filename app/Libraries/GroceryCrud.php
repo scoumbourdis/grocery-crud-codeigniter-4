@@ -2163,24 +2163,24 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 
 	public function set_css($css_file)
 	{
-		$this->css_files[sha1($css_file)] = base_url().$css_file;
+		$this->css_files[sha1($css_file)] = base_url(). '/' . $css_file;
 	}
 
 	public function set_js($js_file)
 	{
-		$this->js_files[sha1($js_file)] = base_url().$js_file;
+		$this->js_files[sha1($js_file)] = base_url(). '/' .$js_file;
 	}
 
 	public function set_js_lib($js_file)
 	{
-		$this->js_lib_files[sha1($js_file)] = base_url().$js_file;
-		$this->js_files[sha1($js_file)] = base_url().$js_file;
+		$this->js_lib_files[sha1($js_file)] = base_url(). '/' .$js_file;
+		$this->js_files[sha1($js_file)] = base_url(). '/' .$js_file;
 	}
 
 	public function set_js_config($js_file)
 	{
-		$this->js_config_files[sha1($js_file)] = base_url().$js_file;
-		$this->js_files[sha1($js_file)] = base_url().$js_file;
+		$this->js_config_files[sha1($js_file)] = base_url(). '/' .$js_file;
+		$this->js_files[sha1($js_file)] = base_url(). '/' .$js_file;
 	}
 
 	public function is_IE7()
@@ -2280,11 +2280,11 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 		{
 			/** Initialize JavaScript variables */
 			$js_vars =  array(
-					'default_javascript_path'	=> base_url().$this->default_javascript_path,
-					'default_css_path'			=> base_url().$this->default_css_path,
-					'default_texteditor_path'	=> base_url().$this->default_texteditor_path,
-					'default_theme_path'		=> base_url().$this->default_theme_path,
-					'base_url'				 	=> base_url()
+					'default_javascript_path'	=> base_url() . '/' . $this->default_javascript_path,
+					'default_css_path'			=> base_url() . '/' . $this->default_css_path,
+					'default_texteditor_path'	=> base_url() . '/' . $this->default_texteditor_path,
+					'default_theme_path'		=> base_url() . '/' . $this->default_theme_path,
+					'base_url'				 	=> base_url() . '/'
 			);
 			$this->_add_js_vars($js_vars);
 
