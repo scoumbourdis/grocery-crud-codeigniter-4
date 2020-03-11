@@ -59,6 +59,7 @@ phpunit.xml.dist
 Common.php
 app/index.html
 spark
+app/Config/Honeypot.php
 app/Database
 app/Filters
 app/Config/Boot
