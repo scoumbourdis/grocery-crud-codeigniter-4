@@ -94,3 +94,4 @@ app/Config/UserAgents.php
 app/Config/Validation.php
 app/Config/View.php
 app/Config/App.php
+tests/
