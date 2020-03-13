@@ -228,7 +228,7 @@ class GroceryCrudModel extends Model {
 		if($related_primary_key !== false)
 		{
 			$unique_name = $this->_unique_join_name($field_name);
-			$this->db->join( $related_table.' as '.$unique_name , "$unique_name.$related_primary_key = {$this->table_name}.$field_name",'left');
+            $this->builder = $this->builder->join( $related_table.' as '.$unique_name , "$unique_name.$related_primary_key = {$this->table_name}.$field_name",'left');
 
 			$this->relation[$field_name] = array($field_name , $related_table , $related_field_title);
 
@@ -255,6 +255,8 @@ class GroceryCrudModel extends Model {
 
     function get_relation_array($field_name , $related_table , $related_field_title, $where_clause, $order_by, $limit = null, $search_like = null)
     {
+        $this->builder = $this->db->table($related_table);
+
     	$relation_array = array();
     	$field_name_hash = $this->_unique_field_name($field_name);
 
@@ -272,24 +274,24 @@ class GroceryCrudModel extends Model {
 	    	$select .= "$related_table.$related_field_title as $field_name_hash";
     	}
 
-    	$this->db->select($select,false);
+    	$this->builder->select($select,false);
     	if($where_clause !== null)
-    		$this->db->where($where_clause);
+            $this->builder->where($where_clause);
 
     	if($where_clause !== null)
-    		$this->db->where($where_clause);
+            $this->builder->where($where_clause);
 
     	if($limit !== null)
-    		$this->db->limit($limit);
+            $this->builder->limit($limit);
 
     	if($search_like !== null)
-    		$this->db->having("$field_name_hash LIKE '%".$this->db->escape_like_str($search_like)."%'");
+            $this->builder->having("$field_name_hash LIKE '%".$this->db->escape_like_str($search_like)."%'");
 
     	$order_by !== null
-    		? $this->db->order_by($order_by)
-    		: $this->db->order_by($field_name_hash);
+    		? $this->builder->orderBy($order_by)
+    		: $this->builder->orderBy($field_name_hash);
 
-    	$results = $this->db->get($related_table)->result();
+    	$results = $this->builder->get()->getResult();
 
     	foreach($results as $row)
     	{
@@ -306,10 +308,17 @@ class GroceryCrudModel extends Model {
 
     function get_relation_total_rows($field_name , $related_table , $related_field_title, $where_clause)
     {
-    	if($where_clause !== null)
-    		$this->db->where($where_clause);
+        $this->builder = $this->db->table($related_table);
 
-    	return $this->db->count_all_results($related_table);
+    	if($where_clause !== null) {
+            $this->builder = $this->builder->where($where_clause);
+        }
+
+    	$countAllResults = $this->builder->countAllResults($related_table);
+
+        $this->builder = null;
+
+        return $countAllResults;
     }
 
     function get_relation_n_n_selection_array($primary_key_value, $field_info)
@@ -481,7 +490,7 @@ class GroceryCrudModel extends Model {
 
     function get_field_types($table_name)
     {
-    	$results = $this->db->field_data($table_name);
+    	$results = $this->db->getFieldData($table_name);
 
     	return $results;
     }
@@ -532,7 +541,7 @@ class GroceryCrudModel extends Model {
     	{
     		$table_name = $this->table_name;
     	}
-    	return $this->db->field_exists($field,$table_name);
+    	return $this->db->fieldExists($field,$table_name);
     }
 
     function get_primary_key($table_name = null)

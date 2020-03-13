@@ -1670,6 +1670,7 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 		$data->unset_export			= $this->unset_export;
 		$data->unset_print			= $this->unset_print;
 
+		$data->codeigniter4         = true;
 		$data->jquery_js            = GroceryCrud::JQUERY;
 		$data->grocery_crud_version = GroceryCrud::VERSION;
 		$data->csrf_cookie_name     = '';
@@ -5301,7 +5302,7 @@ class GroceryCrud extends grocery_CRUD_States
 	 * @param string $table_name
 	 * @return grocery_CRUD
 	 */
-	public function set_table($table_name)
+	public function setTable($table_name)
 	{
 		if(!empty($table_name) && $this->basic_db_table === null)
 		{

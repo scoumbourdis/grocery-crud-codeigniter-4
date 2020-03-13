@@ -8,7 +8,7 @@ class Examples extends BaseController
 	{
 	    $crud = new GroceryCrud();
 
-	    $crud->set_table('customers');
+	    $crud->setTable('customers');
 
 	    $output = $crud->render();
 
