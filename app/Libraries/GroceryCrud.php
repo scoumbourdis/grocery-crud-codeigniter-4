@@ -4147,16 +4147,9 @@ class GroceryCrud extends grocery_CRUD_States
 	 *
 	 * The fields that user can see . It is only for the add form
 	 */
-	public function add_fields()
+	public function addFields(array $addFields)
 	{
-		$args = func_get_args();
-
-		if(isset($args[0]) && is_array($args[0]))
-		{
-			$args = $args[0];
-		}
-
-		$this->add_fields = $args;
+		$this->add_fields = $addFields;
 
 		return $this;
 	}
@@ -5299,16 +5292,16 @@ class GroceryCrud extends grocery_CRUD_States
 	/**
 	 *
 	 * Sets the basic database table that we will get our data.
-	 * @param string $table_name
+	 * @param string $tableName
 	 * @return grocery_CRUD
 	 */
-	public function setTable($table_name)
+	public function setTable($tableName)
 	{
-		if(!empty($table_name) && $this->basic_db_table === null)
+		if(!empty($tableName) && $this->basic_db_table === null)
 		{
-			$this->basic_db_table = $table_name;
+			$this->basic_db_table = $tableName;
 		}
-		elseif(!empty($table_name))
+		elseif(!empty($tableName))
 		{
 			throw new Exception('You have already insert a table name once...', 1);
 		}
@@ -5398,16 +5391,16 @@ class GroceryCrud extends grocery_CRUD_States
 	/**
 	 *
 	 * Set a simple 1-n foreign key relation
-	 * @param string $field_name
-	 * @param string $related_table
-	 * @param string $related_title_field
-	 * @param mixed $where_clause
-	 * @param string $order_by
+	 * @param string $fieldName
+	 * @param string $relatedTable
+	 * @param string $relatedTitleField
+	 * @param mixed $whereClause
+	 * @param string $orderBy
      * @return Grocery_CRUD
 	 */
-	public function setRelation($field_name , $related_table, $related_title_field, $where_clause = null, $order_by = null)
+	public function setRelation($fieldName , $relatedTable, $relatedTitleField, $whereClause = null, $orderBy = null)
 	{
-		$this->relation[$field_name] = array($field_name, $related_table,$related_title_field, $where_clause, $order_by);
+		$this->relation[$fieldName] = array($fieldName, $relatedTable,$relatedTitleField, $whereClause, $orderBy);
 		return $this;
 	}
 
