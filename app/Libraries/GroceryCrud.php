@@ -5405,7 +5405,7 @@ class GroceryCrud extends grocery_CRUD_States
 	 * @param string $order_by
      * @return Grocery_CRUD
 	 */
-	public function set_relation($field_name , $related_table, $related_title_field, $where_clause = null, $order_by = null)
+	public function setRelation($field_name , $related_table, $related_title_field, $where_clause = null, $order_by = null)
 	{
 		$this->relation[$field_name] = array($field_name, $related_table,$related_title_field, $where_clause, $order_by);
 		return $this;
