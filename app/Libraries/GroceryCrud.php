@@ -576,7 +576,7 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
 
 		if(!empty($state_info->order_by))
 		{
-			$this->order_by($state_info->order_by[0],$state_info->order_by[1]);
+			$this->defaultOrdering($state_info->order_by[0],$state_info->order_by[1]);
 		}
 
 		if(isset($state_info->search) && $state_info->search !== '')
@@ -1950,7 +1950,7 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
         $data->input_fields = $this->get_edit_input_fields($data->field_values);
         $data->unique_hash			= $this->get_method_hash();
 
-        $data->fields 		= $this->get_edit_fields();
+        $data->fields 		= $this->get_clone_fields();
         $data->hidden_fields	= $this->get_edit_hidden_fields();
         $data->unset_back_to_list	= $this->unset_back_to_list;
 
@@ -3626,6 +3626,7 @@ class GroceryCrud extends grocery_CRUD_States
 	private $columns_checked		= false;
 	private $add_fields_checked		= false;
 	private $edit_fields_checked	= false;
+	private $clone_fields_checked	= false;
 	private $read_fields_checked	= false;
 
 	protected $default_theme		= 'flexigrid';
@@ -3639,6 +3640,7 @@ class GroceryCrud extends grocery_CRUD_States
 
 	protected $add_fields			= null;
 	protected $edit_fields			= null;
+    protected $clone_fields			= null;
 	protected $read_fields			= null;
 	protected $add_hidden_fields 	= array();
 	protected $edit_hidden_fields 	= array();
@@ -3729,28 +3731,18 @@ class GroceryCrud extends grocery_CRUD_States
 
 	}
 
-	/**
-	 * The displayed columns that user see
-	 *
-	 * @access	public
-	 * @param	string
-	 * @param	array
-	 * @return	void
-	 */
-	public function columns()
+    /**
+     * Specifying the fields that the end user will see as the datagrid columns.
+     *
+     * @param array $columns
+     * @return $this
+     */
+	public function columns(array $columns)
 	{
-		$args = func_get_args();
-
-		if(isset($args[0]) && is_array($args[0]))
-		{
-			$args = $args[0];
-		}
-
-		$this->columns = $args;
+		$this->columns = $columns;
 
 		return $this;
 	}
-
 
 	/**
 	 * Set Validation Rules
@@ -4139,20 +4131,37 @@ class GroceryCrud extends grocery_CRUD_States
 
 		$this->add_fields = $args;
 		$this->edit_fields = $args;
+		$this->clone_fields = $args;
 
 		return $this;
 	}
 
-	/**
-	 *
-	 * The fields that user can see . It is only for the add form
-	 */
+    /**
+     * The fields that will be visible to the end user for add/insert form.
+     *
+     * @param array $addFields
+     * @return $this
+     */
 	public function addFields(array $addFields)
 	{
 		$this->add_fields = $addFields;
 
 		return $this;
 	}
+
+    /**
+     * The fields that will be visible to the end user for clone form.
+     *
+     * @param array $cloneFields
+     * @return $this
+     */
+    public function cloneFields(array $cloneFields)
+    {
+        $this->clone_fields = $cloneFields;
+
+        return $this;
+    }
+
 
 	/**
 	 *
@@ -4483,6 +4492,49 @@ class GroceryCrud extends grocery_CRUD_States
 		return $this->edit_fields;
 	}
 
+    /**
+     *
+     * Enter description here ...
+     */
+    protected function get_clone_fields()
+    {
+        if($this->clone_fields_checked === false)
+        {
+            $field_types = $this->get_field_types();
+            if(!empty($this->clone_fields))
+            {
+                foreach($this->clone_fields as $field_num => $field)
+                {
+                    if(isset($this->display_as[$field]))
+                        $this->clone_fields[$field_num] = (object)array('field_name' => $field, 'display_as' => $this->display_as[$field]);
+                    else
+                        $this->clone_fields[$field_num] = (object)array('field_name' => $field, 'display_as' => $field_types[$field]->display_as);
+                }
+            }
+            else
+            {
+                $this->clone_fields = [];
+                foreach($field_types as $field)
+                {
+                    //Check if an unset_clone_field is initialize for this field name
+                    if($this->unset_clone_fields !== null && is_array($this->unset_clone_fields) && in_array($field->name,$this->unset_clone_fields))
+                        continue;
+
+                    if(!isset($field->db_extra) || $field->db_extra != 'auto_increment')
+                    {
+                        if(isset($this->display_as[$field->name]))
+                            $this->clone_fields[] = (object)array('field_name' => $field->name, 'display_as' => $this->display_as[$field->name]);
+                        else
+                            $this->clone_fields[] = (object)array('field_name' => $field->name, 'display_as' => $field->display_as);
+                    }
+                }
+            }
+
+            $this->clone_fields_checked = true;
+        }
+        return $this->clone_fields;
+    }
+
 	/**
 	 *
 	 * Enter description here ...
@@ -4526,9 +4578,16 @@ class GroceryCrud extends grocery_CRUD_States
 		return $this->read_fields;
 	}
 
-	public function order_by($order_by, $direction = 'asc')
+    /**
+     * The default ordering that the datagrid will have before the user will press any button to order by column.
+     *
+     * @param string $orderBy
+     * @param string $direction
+     * @return $this
+     */
+	public function defaultOrdering($orderBy, $direction = 'asc')
 	{
-		$this->order_by = array($order_by,$direction);
+		$this->order_by = [$orderBy, $direction];
 
 		return $this;
 	}
