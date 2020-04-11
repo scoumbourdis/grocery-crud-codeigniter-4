@@ -4194,25 +4194,25 @@ class GroceryCrud extends grocery_CRUD_States
 		return $this;
 	}
 
-	/**
-	 *
-	 * Changes the displaying label of the field
-	 * @param $field_name
-	 * @param $display_as
-	 * @return void
-	 */
-	public function display_as($field_name, $display_as = null)
+    /**
+     * Displaying the field name with a more readable label to the end-user.
+     *
+     * @param string|array $fieldName
+     * @param string|null $displayAs
+     * @return $this
+     */
+	public function displayAs($fieldName, $displayAs = null)
 	{
-		if(is_array($field_name))
+		if(is_array($fieldName))
 		{
-			foreach($field_name as $field => $display_as)
+			foreach($fieldName as $field => $displayAs)
 			{
-				$this->display_as[$field] = $display_as;
+				$this->display_as[$field] = $displayAs;
 			}
 		}
-		elseif($display_as !== null)
+		elseif($displayAs !== null)
 		{
-			$this->display_as[$field_name] = $display_as;
+			$this->display_as[$fieldName] = $displayAs;
 		}
 		return $this;
 	}
