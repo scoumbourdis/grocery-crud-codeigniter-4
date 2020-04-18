@@ -13,6 +13,7 @@ Grocery CRUD for Codeigniter 4
 | displayAs  | ```$crud->displayAs('contact_first_name', 'First Name');``` |Displaying the field name with a more readable label to the end-user.  |
 | editFields  | ```$crud->editFields(['first_name', 'last_name', 'fullname', 'address']);``` | The fields that will be visible to the end user for edit/update form.  |
 | fieldType  | ```$crud->fieldType('contact_last_name', 'integer');``` | Changing the default field type from the database to fit to our needs.  |
+| fields  | ```$crud->fields(['first_name', 'last_name', 'address']);``` | This function is really just a facade function to call all the 4 functions at once: addFields, editFields, readFields and cloneFields.  |
 | setRelation  | ```$crud->setRelation('officeCode', 'offices', 'city');``` | This is the function that is used to connect two tables with a 1 to n (1:n) relation.  |
 | setTable  | ```$crud->setTable('customers');``` | This is the database table that the developer will use to create the CRUD.  |
 

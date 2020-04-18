@@ -4101,27 +4101,18 @@ class GroceryCrud extends grocery_CRUD_States
         return $this;
     }
 
-	/**
-	 *
-	 * The fields that user will see on add/edit
-	 *
-	 * @access	public
-	 * @param	string
-	 * @param	array
-	 * @return	void
-	 */
-	public function fields()
+    /**
+     * This function is really just a facade function to call all the 4 functions at once: addFields, editFields, readFields and cloneFields.
+     *
+     * @param array $fields
+     * @return $this
+     */
+	public function fields(array $fields)
 	{
-		$args = func_get_args();
-
-		if(isset($args[0]) && is_array($args[0]))
-		{
-			$args = $args[0];
-		}
-
-		$this->add_fields = $args;
-		$this->edit_fields = $args;
-		$this->clone_fields = $args;
+		$this->add_fields = $fields;
+		$this->edit_fields = $fields;
+		$this->read_fields = $fields;
+		$this->clone_fields = $fields;
 
 		return $this;
 	}
