@@ -3772,34 +3772,22 @@ class GroceryCrud extends grocery_CRUD_States
 		return $this;
 	}
 
-	/**
-	 *
-	 * Changes the default field type
-	 * @param string $field
-	 * @param string $type
-	 * @param array|string $extras
-	 */
-	public function change_field_type($field , $type, $extras = null)
+    /**
+     * Changing the default field type from the database to fit to our needs.
+     *
+     * @param string $field
+     * @param string $type
+     * @param array|null $extras
+     * @return $this
+     */
+	public function fieldType($field , $type, $extras = null)
 	{
-		$field_type = (object)array('type' => $type);
-
-		$field_type->extras = $extras;
-
-		$this->change_field_type[$field] = $field_type;
+		$this->change_field_type[$field] = (object)[
+            'type' => $type,
+            'extras' => $extras
+        ];
 
 		return $this;
-	}
-
-	/**
-	 *
-	 * Just an alias to the change_field_type method
-	 * @param string $field
-	 * @param string $type
-	 * @param array|string $extras
-	 */
-	public function field_type($field , $type, $extras = null)
-	{
-		return $this->change_field_type($field , $type, $extras);
 	}
 
 	/**
@@ -4164,21 +4152,15 @@ class GroceryCrud extends grocery_CRUD_States
         return $this;
     }
 
-
-	/**
-	 *
-	 *  The fields that user can see . It is only for the edit form
-	 */
-	public function edit_fields()
+    /**
+     * The fields that will be visible to the end user for edit/update form.
+     *
+     * @param array $editFields
+     * @return $this
+     */
+	public function editFields(array $editFields)
 	{
-		$args = func_get_args();
-
-		if(isset($args[0]) && is_array($args[0]))
-		{
-			$args = $args[0];
-		}
-
-		$this->edit_fields = $args;
+		$this->edit_fields = $editFields;
 
 		return $this;
 	}
