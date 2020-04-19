@@ -2952,14 +2952,14 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 		$this->field_types = null;
 		$this->required_fields = null;
 
-		$read_inputs = array();
+		$read_inputs = [];
 		foreach ($read_fields as $field) {
 			if (!empty($this->change_field_type)
 					&& isset($this->change_field_type[$field->field_name])
 					&& $this->change_field_type[$field->field_name]->type == 'hidden') {
 				continue;
 			}
-			$this->field_type($field->field_name, 'readonly');
+			$this->fieldType($field->field_name, 'readonly');
 		}
 
 		$fields = $this->get_read_fields();
@@ -3176,6 +3176,12 @@ class grocery_CRUD_States extends grocery_CRUD_Layout
         20  => 'clone'
 	);
 
+    /**
+     * Get all the information about the current state.
+     *
+     * @return object
+     * @throws Exception
+     */
     public function getStateInfo()
     {
         $state_code = $this->getStateCode();
@@ -3451,6 +3457,11 @@ class grocery_CRUD_States extends grocery_CRUD_Layout
 		return $ci->router->class;
 	}
 
+    /**
+     * Simply get the current state name as a string.
+     *
+     * @return string
+     */
 	public function getState()
 	{
 		return $this->states[$this->getStateCode()];
@@ -4156,15 +4167,15 @@ class GroceryCrud extends grocery_CRUD_States
 		return $this;
 	}
 
-	public function set_read_fields()
+    /**
+     * The fields that will be visible when the end-user navigates to the view form.
+     *
+     * @param array $readFields
+     * @return $this
+     */
+	public function readFields(array $readFields)
 	{
-		$args = func_get_args();
-
-		if(isset($args[0]) && is_array($args[0])) {
-			$args = $args[0];
-		}
-
-		$this->read_fields = $args;
+		$this->read_fields = $readFields;
 
 		return $this;
 	}
@@ -4694,13 +4705,14 @@ class GroceryCrud extends grocery_CRUD_States
 		$this->_set_primary_keys_to_model();
 	}
 
-	/**
-	 *
-	 * Or else ... make it work! The web application takes decision of what to do and show it to the final user.
-	 * Without this function nothing works. Here is the core of grocery CRUD project.
-	 *
-	 * @access	public
-	 */
+    /**
+     * Or else "make it work"! The web application takes decision of what to do and show it to the final user.
+     * Without this function nothing works. Here is the core of grocery CRUD project where all the decisions are made.
+     * I just hope life was that easy as well :)
+     *
+     * @return object
+     * @throws Exception
+     */
 	public function render()
 	{
 		$this->pre_render();
@@ -5323,27 +5335,20 @@ class GroceryCrud extends grocery_CRUD_States
 		return $this;
 	}
 
-	/**
-	 *
-	 * Sets the basic database table that we will get our data.
-	 * @param string $tableName
-	 * @return grocery_CRUD
-	 */
-	public function setTable($tableName)
+    /**
+     * Sets the basic database table that we will get our data.
+     *
+     * @param string $tableName
+     * @return $this
+     * @throws Exception
+     */
+	public function setTable(string $tableName)
 	{
-		if(!empty($tableName) && $this->basic_db_table === null)
-		{
-			$this->basic_db_table = $tableName;
-		}
-		elseif(!empty($tableName))
-		{
-			throw new Exception('You have already insert a table name once...', 1);
-		}
-		else
-		{
-			throw new Exception('The table name cannot be empty.', 2);
-			die();
-		}
+	    if ($tableName === '') {
+            throw new Exception('The table name cannot be empty.', 2);
+        }
+
+        $this->basic_db_table = $tableName;
 
 		return $this;
 	}
