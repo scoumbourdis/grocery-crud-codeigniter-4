@@ -5412,25 +5412,24 @@ class GroceryCrud extends grocery_CRUD_States
     }
 
     /**
+     * Adding extra action buttons to the rows of the datagrid.
      *
-     * Enter description here ...
-     * @param $title
-     * @param $image_url
-     * @param $url
-     * @param $css_class
-     * @param $url_callback
+     * @param string $label
+     * @param string $css_class
+     * @param string $image_url
+     * @param string $link_url
+     * @param callable|null $url_callback
+     * @return $this
      */
-    public function add_action( $label, $image_url = '', $link_url = '', $css_class = '', $url_callback = null)
+    public function setActionButton(string $label, $css_class = '', callable $url_callback = null)
     {
-        $unique_id = substr($label,0,1).substr(md5($label.$link_url),-8); //The unique id is used for class name so it must begin with a string
-
-        $this->actions[$unique_id]  = (object)array(
+        $this->actions[]  = (object)array(
             'label' 		=> $label,
-            'image_url' 	=> $image_url,
-            'link_url'		=> $link_url,
+            'image_url' 	=> '',
+            'link_url'		=> '',
             'css_class' 	=> $css_class,
             'url_callback' 	=> $url_callback,
-            'url_has_http'	=> substr($link_url,0,7) == 'http://' || substr($link_url,0,8) == 'https://' ? true : false
+            'url_has_http'	=> false
         );
 
         return $this;
