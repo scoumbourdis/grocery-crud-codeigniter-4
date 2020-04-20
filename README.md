@@ -18,6 +18,7 @@ Grocery CRUD for Codeigniter 4
 | getStateInfo  | ```$crud->getStateInfo();``` | Get all the information about the current state.  |
 | readFields  | ```$crud->readFields(['first_name', 'last_name', 'fullname', 'address']);``` | The fields that will be visible when the end-user navigates to the view form.  |
 | render  | ```$output = $crud->render();``` | This is the most basic function. In other words this means “make it work”.  |
+| requiredFields  | ```$crud->requiredFields(['first_name', 'last_name']);``` | The most common validation. Checks is the field provided by the user is empty.  |
 | setRelation  | ```$crud->setRelation('officeCode', 'offices', 'city');``` | This is the function that is used to connect two tables with a 1 to n (1:n) relation.  |
 | setTable  | ```$crud->setTable('customers');``` | This is the database table that the developer will use to create the CRUD.  |
 
