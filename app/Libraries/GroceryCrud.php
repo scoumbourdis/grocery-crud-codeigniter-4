@@ -1877,17 +1877,7 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
             $actions_urls = array();
             foreach($this->actions as $unique_id => $action)
             {
-                if(!empty($action->url_callback))
-                {
-                    $actions_urls[$unique_id] = call_user_func($action->url_callback, $row->$primary_key, $row);
-                }
-                else
-                {
-                    $actions_urls[$unique_id] =
-                        $action->url_has_http ?
-                            $action->link_url.$row->$primary_key :
-                            site_url($action->link_url.'/'.$row->$primary_key);
-                }
+                $actions_urls[$unique_id] = call_user_func($action->url_callback, $row->$primary_key, $row);
             }
             $row->action_urls = $actions_urls;
         }
@@ -5415,21 +5405,21 @@ class GroceryCrud extends grocery_CRUD_States
      * Adding extra action buttons to the rows of the datagrid.
      *
      * @param string $label
-     * @param string $css_class
-     * @param string $image_url
-     * @param string $link_url
-     * @param callable|null $url_callback
+     * @param string $cssClass
+     * @param callable|null $urlCallback
+     * @param bool $newTab
      * @return $this
      */
-    public function setActionButton(string $label, $css_class = '', callable $url_callback = null)
+    public function setActionButton(string $label, string $cssClass, callable $urlCallback, $newTab = false)
     {
         $this->actions[]  = (object)array(
             'label' 		=> $label,
             'image_url' 	=> '',
             'link_url'		=> '',
-            'css_class' 	=> $css_class,
-            'url_callback' 	=> $url_callback,
-            'url_has_http'	=> false
+            'css_class' 	=> $cssClass,
+            'url_callback' 	=> $urlCallback,
+            'url_has_http'	=> false,
+            'new_tab'       => $newTab
         );
 
         return $this;

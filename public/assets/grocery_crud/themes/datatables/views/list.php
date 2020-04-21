@@ -22,8 +22,15 @@
 					foreach($row->action_urls as $action_unique_id => $action_url){
 						$action = $actions[$action_unique_id];
 				?>
-						<a href="<?php echo $action_url; ?>" class="edit_button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" role="button">
-							<span class="ui-button-icon-primary ui-icon <?php echo $action->css_class; ?> <?php echo $action_unique_id;?>"></span><span class="ui-button-text">&nbsp;<?php echo $action->label?></span>
+						<a
+                                href="<?php echo $action_url; ?>"
+                                class="edit_button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary"
+                                role="button"
+                            <?php if ($action->new_tab) { ?>
+                                target="_blank"
+                            <?php } ?>
+                        >
+							<span class="<?php echo $action->css_class; ?>"></span><span class="ui-button-text">&nbsp;<?php echo $action->label?></span>
 						</a>
 				<?php }
 				}

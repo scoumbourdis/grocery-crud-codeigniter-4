@@ -1,11 +1,11 @@
 <?php
 
 	$this->set_css($this->default_theme_path.'/datatables/css/demo_table_jui.css');
-	$this->set_css($this->default_css_path.'/ui/simple/'.\App|Libraries\GroceryCrud::JQUERY_UI_CSS);
+	$this->set_css($this->default_css_path.'/ui/simple/'.\App\Libraries\GroceryCrud::JQUERY_UI_CSS);
 	$this->set_css($this->default_theme_path.'/datatables/css/datatables.css');
 	$this->set_css($this->default_theme_path.'/datatables/css/jquery.dataTables.css');
 	$this->set_css($this->default_theme_path.'/datatables/extras/TableTools/media/css/TableTools.css');
-	$this->set_js_lib($this->default_javascript_path.'/'.\App|Libraries\GroceryCrud::JQUERY);
+	$this->set_js_lib($this->default_javascript_path.'/'.\App\Libraries\GroceryCrud::JQUERY);
 
     if ($dialog_forms) {
         $this->set_js_lib($this->default_javascript_path.'/jquery_plugins/jquery.noty.js');
@@ -15,7 +15,7 @@
 
     $this->set_js_lib($this->default_javascript_path.'/common/list.js');
 
-	$this->set_js_lib($this->default_javascript_path.'/jquery_plugins/ui/'.\App|Libraries\GroceryCrud::JQUERY_UI_JS);
+	$this->set_js_lib($this->default_javascript_path.'/jquery_plugins/ui/'.\App\Libraries\GroceryCrud::JQUERY_UI_JS);
 	$this->set_js_lib($this->default_theme_path.'/datatables/js/jquery.dataTables.min.js');
 	$this->set_js($this->default_theme_path.'/datatables/js/datatables-extras.js');
 	$this->set_js($this->default_theme_path.'/datatables/js/datatables.js');
