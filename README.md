@@ -20,6 +20,8 @@ Grocery CRUD community edition for Codeigniter 4
 | render  | ```$output = $crud->render();``` | This is the most basic function. In other words this means “make it work”.  |
 | requiredFields  | ```$crud->requiredFields(['first_name', 'last_name']);``` | The most common validation. Checks is the field provided by the user is empty.  |
 | setActionButton  | ```$crud->setActionButton('User Avatar', 'el el-user', function ($primaryKey) { return site_url('/view_avatar/' . $primaryKey); }, true);``` | Adding extra action buttons to the rows of the datagrid.  |
+| setAdd  | ```$crud->setAdd();``` | Setting the insert functionality. This function is rare to use as the default is already enabled.  |
+| setApiUrlPath  | ```$crud->setApiUrlPath(site_url('/example/index'), site_url('/'));``` | Change the default API URL path and instead use the provided URL. Useful when we use Routes. |
 | setRelation  | ```$crud->setRelation('officeCode', 'offices', 'city');``` | This is the function that is used to connect two tables with a 1 to n (1:n) relation.  |
 | setTable  | ```$crud->setTable('customers');``` | This is the database table that the developer will use to create the CRUD.  |
 
@@ -32,7 +34,8 @@ Grocery CRUD community edition is following the same direction.
 
 If you are migrating from version 1 to 2 you will need to consider the below migration notes.  
 
-* `add_fields` is now renamed to `addFields` and it only gets an array as argument 
-* `clone_fields` is now renamed to `cloneFields` and it only gets an array as argument 
+* `add_fields` is now renamed to `addFields` and it only gets an array as an argument 
+* `clone_fields` is now renamed to `cloneFields` and it only gets an array as an argument 
+* `columns` now only gets an array as an argument
 
 For more information, visit http://www.grocerycrud.com

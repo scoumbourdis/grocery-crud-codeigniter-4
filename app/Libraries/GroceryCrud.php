@@ -3884,6 +3884,17 @@ class GroceryCrud extends grocery_CRUD_States
     }
 
     /**
+     * Setting the insert functionality. This function is rare to use as the default is already enabled.
+     *
+     * @return $this
+     */
+    public function setAdd() {
+        $this->unset_add = false;
+
+        return $this;
+    }
+
+    /**
      * Unsets the add operation from the list
      *
      * @return	void
@@ -5363,20 +5374,20 @@ class GroceryCrud extends grocery_CRUD_States
      * all the CRUD operations correctly.
      * The url path has to be set from this method like this:
      * <code>
-     * 		$crud->set_crud_url_path(site_url('example/index'));
+     * 		$crud->setApiUrlPath(site_url('/example/index'), site_url('/'));
      * </code>
      *
-     * @param string $crud_url_path
-     * @param string $list_url_path
+     * @param string $crudUrlPath
+     * @param string|null $listUrlPath
      * @return grocery_CRUD
      */
-    public function set_crud_url_path($crud_url_path, $list_url_path = null)
+    public function setApiUrlPath($crudUrlPath, $listUrlPath = null)
     {
-        $this->crud_url_path = $crud_url_path;
+        $this->crud_url_path = $crudUrlPath;
 
         //If the list_url_path is empty so we are guessing that the list_url_path
         //will be the same with crud_url_path
-        $this->list_url_path = !empty($list_url_path) ? $list_url_path : $crud_url_path;
+        $this->list_url_path = !empty($listUrlPath) ? $listUrlPath : $crudUrlPath;
 
         return $this;
     }
