@@ -22,6 +22,12 @@ Grocery CRUD community edition for Codeigniter 4
 | setActionButton  | ```$crud->setActionButton('User Avatar', 'el el-user', function ($primaryKey) { return site_url('/view_avatar/' . $primaryKey); }, true);``` | Adding extra action buttons to the rows of the datagrid.  |
 | setAdd  | ```$crud->setAdd();``` | Setting the insert functionality. This function is rare to use as the default is already enabled.  |
 | setApiUrlPath  | ```$crud->setApiUrlPath(site_url('/example/index'), site_url('/'));``` | Change the default API URL path and instead use the provided URL. Useful when we use Routes. |
+| setClone  | ```$crud->setClone();``` | Enabling the clone functionality for the datagrid. Clone is basically copying all the data to an insert form. |
+| setDelete  | ```$crud->setDelete();``` | Setting the delete functionality. This function is rare to use as the default is already enabled.. |
+| setEdit  | ```$crud->setEdit();``` | Setting the update functionality. This function is rare to use as the default is already enabled. |
+| setExport  | ```$crud->setExport();``` | Setting the export functionality. This function is rare to use as the default is already enabled. |
+| setPrint  | ```$crud->setPrint();``` | Setting the print functionality. This function is rare to use as the default is already enabled. |
+| setRead  | ```$crud->setRead();``` | In order to enable the “View” button at your grid you will need to use the function setRead. The view of the form (read only) is false by default. |
 | setRelation  | ```$crud->setRelation('officeCode', 'offices', 'city');``` | This is the function that is used to connect two tables with a 1 to n (1:n) relation.  |
 | setTable  | ```$crud->setTable('customers');``` | This is the database table that the developer will use to create the CRUD.  |
 
@@ -34,8 +40,17 @@ Grocery CRUD community edition is following the same direction.
 
 If you are migrating from version 1 to 2 you will need to consider the below migration notes.  
 
+### Renaming of functions
+
 * `add_fields` is now renamed to `addFields` and it only gets an array as an argument 
 * `clone_fields` is now renamed to `cloneFields` and it only gets an array as an argument 
 * `columns` now only gets an array as an argument
+
+### Removed features/functions
+* `set_field_upload` is now removed. The upload functionality was a feature that was causing security issues as it 
+could work only to a public folder and the uploader was not up to date and it was causing confusion to the developers 
+that just wanted to see it working and unfortunately they couldn't.
+
+* "Read" and "Clone" feature is disabled by default. You can enable them by adding `$crud->setRead();` or `$crud->setClone();` on your CRUD.
 
 For more information, visit http://www.grocerycrud.com

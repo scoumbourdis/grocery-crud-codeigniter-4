@@ -62,9 +62,6 @@ class grocery_CRUD_Field_Types
 
                 if (isset($this->relation[$field_info->name])) {
                     $field_info->crud_type = "relation_".$field_type->type;
-                }
-                elseif (isset($this->upload_fields[$field_info->name])) {
-                    $field_info->crud_type = "upload_file_".$field_type->type;
                 } else {
                     $field_info->crud_type 	= $field_type->type;
                     $field_info->extras 	=  $field_type->extras;
@@ -76,11 +73,6 @@ class grocery_CRUD_Field_Types
             {
                 $real_type				= 'relation';
                 $field_info->crud_type 	= 'relation';
-            }
-            elseif(isset($this->upload_fields[$field_info->name]))
-            {
-                $real_type				= 'upload_file';
-                $field_info->crud_type 	= 'upload_file';
             }
             else
             {
@@ -99,11 +91,6 @@ class grocery_CRUD_Field_Types
                 case 'relation':
                 case 'relation_readonly':
                     $field_info->extras 	= $this->relation[$field_info->name];
-                    break;
-
-                case 'upload_file':
-                case 'upload_file_readonly':
-                    $field_info->extras 	= $this->upload_fields[$field_info->name];
                     break;
 
                 default:
@@ -1456,130 +1443,6 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
         $this->basic_model->set_basic_table($table_name);
     }
 
-    protected function upload_file($state_info)
-    {
-        if(isset($this->upload_fields[$state_info->field_name]) )
-        {
-            if($this->callback_upload === null)
-            {
-                if($this->callback_before_upload !== null)
-                {
-                    $callback_before_upload_response = call_user_func($this->callback_before_upload, $_FILES,  $this->upload_fields[$state_info->field_name]);
-
-                    if($callback_before_upload_response === false)
-                        return false;
-                    elseif(is_string($callback_before_upload_response))
-                        return $callback_before_upload_response;
-                }
-
-                $upload_info = $this->upload_fields[$state_info->field_name];
-
-                header('Pragma: no-cache');
-                header('Cache-Control: private, no-cache');
-                header('Content-Disposition: inline; filename="files.json"');
-                header('X-Content-Type-Options: nosniff');
-                header('Access-Control-Allow-Origin: *');
-                header('Access-Control-Allow-Methods: OPTIONS, HEAD, GET, POST, PUT, DELETE');
-                header('Access-Control-Allow-Headers: X-File-Name, X-File-Type, X-File-Size');
-
-                $allowed_files = $this->config->file_upload_allow_file_types;
-
-                $reg_exp = '';
-                if(!empty($upload_info->allowed_file_types)){
-                    $reg_exp = '/(\\.|\\/)('.$upload_info->allowed_file_types.')$/i';
-                }else{
-                    $reg_exp = '/(\\.|\\/)('.$allowed_files.')$/i';
-                }
-
-                $max_file_size_ui = $this->config->file_upload_max_file_size;
-                $max_file_size_bytes = $this->_convert_bytes_ui_to_bytes($max_file_size_ui);
-
-                $options = array(
-                    'upload_dir' 		=> $upload_info->upload_path.'/',
-                    'param_name'		=> $this->_unique_field_name($state_info->field_name),
-                    'upload_url'		=> base_url().$upload_info->upload_path.'/',
-                    'accept_file_types' => $reg_exp,
-                    'max_file_size'		=> $max_file_size_bytes
-                );
-                $upload_handler = new Grocery_Crud_Uploader($options);
-                $upload_handler->default_config_path = $this->default_config_path;
-                $uploader_response = $upload_handler->post();
-
-                if(is_array($uploader_response))
-                {
-                    foreach($uploader_response as &$response)
-                    {
-                        unset($response->delete_url);
-                        unset($response->delete_type);
-                    }
-                }
-
-                if($this->callback_after_upload !== null)
-                {
-                    $callback_after_upload_response = call_user_func($this->callback_after_upload, $uploader_response ,  $this->upload_fields[$state_info->field_name] , $_FILES );
-
-                    if($callback_after_upload_response === false)
-                        return false;
-                    elseif(is_string($callback_after_upload_response))
-                        return $callback_after_upload_response;
-                    elseif(is_array($callback_after_upload_response))
-                        $uploader_response = $callback_after_upload_response;
-                }
-
-                return $uploader_response;
-            }
-            else
-            {
-                $upload_response = call_user_func($this->callback_upload, $_FILES, $this->upload_fields[$state_info->field_name] );
-
-                if($upload_response === false)
-                {
-                    return false;
-                }
-                else
-                {
-                    return $upload_response;
-                }
-            }
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    protected function delete_file($state_info)
-    {
-
-        if(isset($state_info->field_name) && isset($this->upload_fields[$state_info->field_name]))
-        {
-            $upload_info = $this->upload_fields[$state_info->field_name];
-
-            if(file_exists("{$upload_info->upload_path}/{$state_info->file_name}"))
-            {
-                if( unlink("{$upload_info->upload_path}/{$state_info->file_name}") )
-                {
-                    $this->basic_model->db_file_delete($state_info->field_name, $state_info->file_name);
-
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                $this->basic_model->db_file_delete($state_info->field_name, $state_info->file_name);
-                return true;
-            }
-        }
-        else
-        {
-            return false;
-        }
-    }
-
     protected function ajax_relation($state_info)
     {
         if(!isset($this->relation[$state_info->field_name]))
@@ -1718,10 +1581,6 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
         {
             $this->set_echo_and_die();
             $this->_theme_view('list.php',$data);
-        }
-
-        if (!empty($this->upload_fields)) {
-            $this->load_js_fancybox();
         }
     }
 
@@ -2214,17 +2073,6 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
         return $this->js_config_files;
     }
 
-    /**
-     * Load Javascripts
-     **/
-    protected function load_js_fancybox()
-    {
-        $this->set_css($this->default_css_path.'/jquery_plugins/fancybox/jquery.fancybox.css');
-
-        $this->set_js_lib($this->default_javascript_path.'/jquery_plugins/jquery.fancybox-1.3.4.js');
-        $this->set_js_lib($this->default_javascript_path.'/jquery_plugins/jquery.easing-1.3.pack.js');
-    }
-
     protected function load_js_chosen()
     {
         $this->set_css($this->default_css_path.'/jquery_plugins/chosen/chosen.css');
@@ -2235,21 +2083,6 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
     {
         $this->set_css($this->default_css_path.'/ui/simple/' . GroceryCrud::JQUERY_UI_CSS);
         $this->set_js_lib($this->default_javascript_path.'/jquery_plugins/ui/' . GroceryCrud::JQUERY_UI_JS);
-    }
-
-    protected function load_js_uploader()
-    {
-        $this->set_css($this->default_css_path.'/ui/simple/' . GroceryCrud::JQUERY_UI_CSS);
-        $this->set_css($this->default_css_path.'/jquery_plugins/file_upload/file-uploader.css');
-        $this->set_css($this->default_css_path.'/jquery_plugins/file_upload/jquery.fileupload-ui.css');
-
-        $this->set_js_lib($this->default_javascript_path.'/jquery_plugins/ui/' . GroceryCrud::JQUERY_UI_JS);
-        $this->set_js_lib($this->default_javascript_path.'/jquery_plugins/tmpl.min.js');
-        $this->set_js_lib($this->default_javascript_path.'/jquery_plugins/load-image.min.js');
-
-        $this->set_js_lib($this->default_javascript_path.'/jquery_plugins/jquery.iframe-transport.js');
-        $this->set_js_lib($this->default_javascript_path.'/jquery_plugins/jquery.fileupload.js');
-        $this->set_js_config($this->default_javascript_path.'/jquery_plugins/config/jquery.fileupload.config.js');
     }
 
     protected function get_layout()
@@ -2772,82 +2605,6 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
         return $bytes;
     }
 
-    protected function get_upload_file_input($field_info, $value)
-    {
-        $this->load_js_uploader();
-
-        //Fancybox
-        $this->load_js_fancybox();
-
-        $this->set_js_config($this->default_javascript_path.'/jquery_plugins/config/jquery.fancybox.config.js');
-
-        $unique = mt_rand();
-
-        $allowed_files = $this->config->file_upload_allow_file_types;
-        $allowed_files_ui = '.'.str_replace('|',',.',$allowed_files);
-        $max_file_size_ui = $this->config->file_upload_max_file_size;
-        $max_file_size_bytes = $this->_convert_bytes_ui_to_bytes($max_file_size_ui);
-
-        $this->_inline_js('
-			var upload_info_'.$unique.' = {
-				accepted_file_types: /(\\.|\\/)('.$allowed_files.')$/i,
-				accepted_file_types_ui : "'.$allowed_files_ui.'",
-				max_file_size: '.$max_file_size_bytes.',
-				max_file_size_ui: "'.$max_file_size_ui.'"
-			};
-
-			var string_upload_file 	= "'.$this->l('form_upload_a_file').'";
-			var string_delete_file 	= "'.$this->l('string_delete_file').'";
-			var string_progress 			= "'.$this->l('string_progress').'";
-			var error_on_uploading 			= "'.$this->l('error_on_uploading').'";
-			var message_prompt_delete_file 	= "'.$this->l('message_prompt_delete_file').'";
-
-			var error_max_number_of_files 	= "'.$this->l('error_max_number_of_files').'";
-			var error_accept_file_types 	= "'.$this->l('error_accept_file_types').'";
-			var error_max_file_size 		= "'.str_replace("{max_file_size}",$max_file_size_ui,$this->l('error_max_file_size')).'";
-			var error_min_file_size 		= "'.$this->l('error_min_file_size').'";
-
-			var base_url = "'.base_url().'";
-			var upload_a_file_string = "'.$this->l('form_upload_a_file').'";
-		');
-
-        $uploader_display_none 	= empty($value) ? "" : "display:none;";
-        $file_display_none  	= empty($value) ?  "display:none;" : "";
-
-        $is_image = !empty($value) &&
-        ( substr($value,-4) == '.jpg'
-            || substr($value,-4) == '.png'
-            || substr($value,-5) == '.jpeg'
-            || substr($value,-4) == '.gif'
-            || substr($value,-5) == '.tiff')
-            ? true : false;
-
-        $image_class = $is_image ? 'image-thumbnail' : '';
-
-        $input = '<span class="fileinput-button qq-upload-button" id="upload-button-'.$unique.'" style="'.$uploader_display_none.'">
-			<span>'.$this->l('form_upload_a_file').'</span>
-			<input type="file" name="'.$this->_unique_field_name($field_info->name).'" class="gc-file-upload" rel="'.$this->getUploadUrl($field_info->name).'" id="'.$unique.'">
-			<input class="hidden-upload-input" type="hidden" name="'.$field_info->name.'" value="'.$value.'" rel="'.$this->_unique_field_name($field_info->name).'" />
-		</span>';
-
-        $this->set_css($this->default_css_path.'/jquery_plugins/file_upload/fileuploader.css');
-
-        $file_url = base_url().$field_info->extras->upload_path.'/'.$value;
-
-        $input .= "<div id='uploader_$unique' rel='$unique' class='grocery-crud-uploader' style='$uploader_display_none'></div>";
-        $input .= "<div id='success_$unique' class='upload-success-url' style='$file_display_none padding-top:7px;'>";
-        $input .= "<a href='".$file_url."' id='file_$unique' class='open-file";
-        $input .= $is_image ? " $image_class'><img src='".$file_url."' height='50px'>" : "' target='_blank'>$value";
-        $input .= "</a> ";
-        $input .= "<a href='javascript:void(0)' id='delete_$unique' class='delete-anchor'>".$this->l('form_upload_delete')."</a> ";
-        $input .= "</div><div style='clear:both'></div>";
-        $input .= "<div id='loading-$unique' style='display:none'><span id='upload-state-message-$unique'></span> <span class='qq-upload-spinner'></span> <span id='progress-$unique'></span></div>";
-        $input .= "<div style='display:none'><a href='".$this->getUploadUrl($field_info->name)."' id='url_$unique'></a></div>";
-        $input .= "<div style='display:none'><a href='".$this->getFileDeleteUrl($field_info->name)."' id='delete_url_$unique' rel='$value' ></a></div>";
-
-        return $input;
-    }
-
     protected function get_add_hidden_fields()
     {
         return $this->add_hidden_fields;
@@ -3165,10 +2922,6 @@ class grocery_CRUD_States extends grocery_CRUD_Layout
         8   => 'ajax_list_info',
         9	=> 'insert_validation',
         10	=> 'update_validation',
-        11	=> 'upload_file',
-        12	=> 'delete_file',
-        13	=> 'ajax_relation',
-        14	=> 'ajax_relation_n_n',
         15	=> 'success',
         16  => 'export',
         17  => 'print',
@@ -3568,16 +3321,6 @@ class grocery_CRUD_States extends grocery_CRUD_Layout
             return $this->state_url('success/'.$primary_key,true);
     }
 
-    protected function getUploadUrl($field_name)
-    {
-        return $this->state_url('upload_file/'.$field_name);
-    }
-
-    protected function getFileDeleteUrl($field_name)
-    {
-        return $this->state_url('delete_file/'.$field_name);
-    }
-
     protected function getAjaxRelationUrl()
     {
         return $this->state_url('ajax_relation');
@@ -3675,7 +3418,6 @@ class GroceryCrud extends grocery_CRUD_States
     protected $validation_rules		= array();
     protected $relation				= array();
     protected $relation_n_n			= array();
-    protected $upload_fields		= array();
     protected $actions				= array();
 
     protected $form_validation		= null;
@@ -3689,7 +3431,7 @@ class GroceryCrud extends grocery_CRUD_States
     protected $unset_add			= false;
     protected $unset_edit			= false;
     protected $unset_delete			= false;
-    protected $unset_read			= false;
+    protected $unset_read			= true;
     protected $unset_jquery			= false;
     protected $unset_jquery_ui		= false;
     protected $unset_bootstrap 		= false;
@@ -3697,7 +3439,7 @@ class GroceryCrud extends grocery_CRUD_States
     protected $unset_export			= false;
     protected $unset_print			= false;
     protected $unset_back_to_list	= false;
-    protected $unset_clone			= false;
+    protected $unset_clone			= true;
     protected $unset_columns		= null;
     protected $unset_add_fields 	= null;
     protected $unset_edit_fields	= null;
@@ -3722,9 +3464,6 @@ class GroceryCrud extends grocery_CRUD_States
     protected $callback_edit_field		= array();
     protected $callback_read_field		= array();
     protected $callback_clone_field		= array();
-    protected $callback_upload			= null;
-    protected $callback_before_upload	= null;
-    protected $callback_after_upload	= null;
 
     protected $default_javascript_path	= null; //autogenerate, please do not modify
     protected $default_css_path			= null; //autogenerate, please do not modify
@@ -3890,6 +3629,73 @@ class GroceryCrud extends grocery_CRUD_States
      */
     public function setAdd() {
         $this->unset_add = false;
+
+        return $this;
+    }
+
+    /**
+     * Setting the delete functionality. This function is rare to use as the default is already enabled.
+     *
+     * @return $this
+     */
+    public function setDelete() {
+        $this->unset_delete = false;
+
+        return $this;
+    }
+
+    /**
+     * Setting the update functionality. This function is rare to use as the default is already enabled.
+     *
+     * @return $this
+     */
+    public function setEdit() {
+        $this->unset_edit = false;
+
+        return $this;
+    }
+
+    /**
+     * Setting the export functionality. This function is rare to use as the default is already enabled.
+     *
+     * @return $this
+     */
+    public function setExport() {
+        $this->unset_export = false;
+
+        return $this;
+    }
+
+    /**
+     * Setting the print functionality. This function is rare to use as the default is already enabled.
+     *
+     * @return $this
+     */
+    public function setPrint() {
+        $this->unset_print = false;
+
+        return $this;
+    }
+
+
+    /**
+     * In order to enable the “View” button at your grid you will need to use the function setRead. The view of the form (read only) is false by default.
+     *
+     * @return $this
+     */
+    public function setRead() {
+        $this->unset_read = false;
+
+        return $this;
+    }
+
+    /**
+     * Enabling the clone functionality for the datagrid. Clone is basically copying all the data to an insert form.
+     *
+     * @return $this
+     */
+    public function setClone() {
+        $this->unset_clone = false;
 
         return $this;
     }
@@ -4658,8 +4464,6 @@ class GroceryCrud extends grocery_CRUD_States
         $this->config->default_language 	= $config->default_language;
         $this->config->date_format 			= $config->date_format;
         $this->config->default_per_page		= $config->default_per_page;
-        $this->config->file_upload_allow_file_types	= $config->file_upload_allow_file_types;
-        $this->config->file_upload_max_file_size	= $config->file_upload_max_file_size;
         $this->config->default_text_editor	= $config->default_text_editor;
         $this->config->text_editor_type		= $config->text_editor_type;
         $this->config->character_limiter	= $config->character_limiter;
@@ -4886,40 +4690,6 @@ class GroceryCrud extends grocery_CRUD_States
 
                 $this->validation_layout($validation_result);
                 break;
-
-            case 11://upload_file
-
-                $state_info = $this->getStateInfo();
-
-                $upload_result = $this->upload_file($state_info);
-
-                $this->upload_layout($upload_result, $state_info->field_name);
-                break;
-
-            case 12://delete_file
-                $state_info = $this->getStateInfo();
-
-                $delete_file_result = $this->delete_file($state_info);
-
-                $this->delete_file_layout($delete_file_result);
-                break;
-            /*
-			case 13: //ajax_relation
-				$state_info = $this->getStateInfo();
-
-				$ajax_relation_result = $this->ajax_relation($state_info);
-
-				$ajax_relation_result[""] = "";
-
-				echo json_encode($ajax_relation_result);
-				die();
-			break;
-
-			case 14: //ajax_relation_n_n
-				echo json_encode(array("34" => 'Johnny' , "78" => "Test"));
-				die();
-			break;
-			*/
             case 16: //export to excel
                 //a big number just to ensure that the table characters will not be cutted.
                 $this->character_limiter = 1000000;
@@ -5237,47 +5007,6 @@ class GroceryCrud extends grocery_CRUD_States
 
     /**
      *
-     * Callback that replace the default auto uploader
-     *
-     * @param mixed $callback
-     * @return grocery_CRUD
-     */
-    public function callback_upload($callback = null)
-    {
-        $this->callback_upload = $callback;
-
-        return $this;
-    }
-
-    /**
-     *
-     * A callback that triggered before the upload functionality. This callback is suggested for validation checks
-     * @param mixed $callback
-     * @return grocery_CRUD
-     */
-    public function callback_before_upload($callback = null)
-    {
-        $this->callback_before_upload = $callback;
-
-        return $this;
-    }
-
-    /**
-     *
-     * A callback that triggered after the upload functionality
-     * @param mixed $callback
-     * @return grocery_CRUD
-     */
-    public function callback_after_upload($callback = null)
-    {
-        $this->callback_after_upload = $callback;
-
-        return $this;
-
-    }
-
-    /**
-     *
      * Gets the basic database table of our crud.
      * @return string
      */
@@ -5481,432 +5210,4 @@ class GroceryCrud extends grocery_CRUD_States
 
         return $this;
     }
-
-    /**
-     *
-     * Transform a field to an upload field
-     *
-     * @param string $field_name
-     * @param string $upload_path
-     * @return Grocery_CRUD
-     */
-    public function set_field_upload($field_name, $upload_dir = '', $allowed_file_types = '')
-    {
-        $upload_dir = !empty($upload_dir) && substr($upload_dir,-1,1) == '/'
-            ? substr($upload_dir,0,-1)
-            : $upload_dir;
-        $upload_dir = !empty($upload_dir) ? $upload_dir : 'assets/uploads/files';
-
-        /** Check if the upload Url folder exists. If not then throw an exception **/
-        if (!is_dir(FCPATH.$upload_dir)) {
-            throw new Exception("It seems that the folder \"".FCPATH.$upload_dir."\" for the field name
-					\"".$field_name."\" doesn't exists. Please create the folder and try again.");
-        }
-
-        $this->upload_fields[$field_name] = (object) array(
-            'field_name' => $field_name,
-            'upload_path' => $upload_dir,
-            'allowed_file_types' => $allowed_file_types,
-            'encrypted_field_name' => $this->_unique_field_name($field_name));
-        return $this;
-    }
-}
-
-/*
- * jQuery File Upload Plugin PHP Example 5.5
- * https://github.com/blueimp/jQuery-File-Upload
- *
- * Copyright 2010, Sebastian Tschan
- * https://blueimp.net
- *
- * Licensed under the MIT license:
- * http://www.opensource.org/licenses/MIT
- */
-
-class Grocery_Crud_Uploader
-{
-    private $options;
-    public $default_config_path = null;
-
-    function __construct($options=null) {
-        $this->options = array(
-            'script_url' => $this->getFullUrl().'/'.basename(__FILE__),
-            'upload_dir' => dirname(__FILE__).'/files/',
-            'upload_url' => $this->getFullUrl().'/files/',
-            'param_name' => 'files',
-            // The php.ini settings upload_max_filesize and post_max_size
-            // take precedence over the following max_file_size setting:
-            'max_file_size' => null,
-            'min_file_size' => 1,
-            'accept_file_types' => '/.+$/i',
-            'max_number_of_files' => null,
-            // Set the following option to false to enable non-multipart uploads:
-            'discard_aborted_uploads' => true,
-            // Set to true to rotate images based on EXIF meta data, if available:
-            'orient_image' => false,
-            'image_versions' => array(
-                // Uncomment the following version to restrict the size of
-                // uploaded images. You can also add additional versions with
-                // their own upload directories:
-                /*
-                'large' => array(
-                    'upload_dir' => dirname(__FILE__).'/files/',
-                    'upload_url' => dirname($_SERVER['PHP_SELF']).'/files/',
-                    'max_width' => 1920,
-                    'max_height' => 1200
-                ),
-
-                'thumbnail' => array(
-                    'upload_dir' => dirname(__FILE__).'/thumbnails/',
-                    'upload_url' => $this->getFullUrl().'/thumbnails/',
-                    'max_width' => 80,
-                    'max_height' => 80
-                )
-                */
-            )
-        );
-        if ($options) {
-            // Or else for PHP >= 5.3.0 use: $this->options = array_replace_recursive($this->options, $options);
-            foreach($options as $option_name => $option)
-            {
-                $this->options[$option_name] = $option;
-            }
-        }
-    }
-
-    function getFullUrl() {
-        return
-            (isset($_SERVER['HTTPS']) ? 'https://' : 'http://').
-            (isset($_SERVER['REMOTE_USER']) ? $_SERVER['REMOTE_USER'].'@' : '').
-            (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : ($_SERVER['SERVER_NAME'].
-                (isset($_SERVER['HTTPS']) && $_SERVER['SERVER_PORT'] === 443 ||
-                $_SERVER['SERVER_PORT'] === 80 ? '' : ':'.$_SERVER['SERVER_PORT']))).
-            substr($_SERVER['SCRIPT_NAME'],0, strrpos($_SERVER['SCRIPT_NAME'], '/'));
-    }
-
-    private function get_file_object($file_name) {
-        $file_path = $this->options['upload_dir'].$file_name;
-        if (is_file($file_path) && $file_name[0] !== '.') {
-            $file = new stdClass();
-            $file->name = $file_name;
-            $file->size = filesize($file_path);
-            $file->url = $this->options['upload_url'].rawurlencode($file->name);
-            foreach($this->options['image_versions'] as $version => $options) {
-                if (is_file($options['upload_dir'].$file_name)) {
-                    $file->{$version.'_url'} = $options['upload_url']
-                        .rawurlencode($file->name);
-                }
-            }
-            $file->delete_url = $this->options['script_url']
-                .'?file='.rawurlencode($file->name);
-            $file->delete_type = 'DELETE';
-            return $file;
-        }
-        return null;
-    }
-
-    private function get_file_objects() {
-        return array_values(array_filter(array_map(
-            array($this, 'get_file_object'),
-            scandir($this->options['upload_dir'])
-        )));
-    }
-
-    private function create_scaled_image($file_name, $options) {
-        $file_path = $this->options['upload_dir'].$file_name;
-        $new_file_path = $options['upload_dir'].$file_name;
-        list($img_width, $img_height) = @getimagesize($file_path);
-        if (!$img_width || !$img_height) {
-            return false;
-        }
-        $scale = min(
-            $options['max_width'] / $img_width,
-            $options['max_height'] / $img_height
-        );
-        if ($scale > 1) {
-            $scale = 1;
-        }
-        $new_width = $img_width * $scale;
-        $new_height = $img_height * $scale;
-        $new_img = @imagecreatetruecolor($new_width, $new_height);
-        switch (strtolower(substr(strrchr($file_name, '.'), 1))) {
-            case 'jpg':
-            case 'jpeg':
-                $src_img = @imagecreatefromjpeg($file_path);
-                $write_image = 'imagejpeg';
-                break;
-            case 'gif':
-                @imagecolortransparent($new_img, @imagecolorallocate($new_img, 0, 0, 0));
-                $src_img = @imagecreatefromgif($file_path);
-                $write_image = 'imagegif';
-                break;
-            case 'png':
-                @imagecolortransparent($new_img, @imagecolorallocate($new_img, 0, 0, 0));
-                @imagealphablending($new_img, false);
-                @imagesavealpha($new_img, true);
-                $src_img = @imagecreatefrompng($file_path);
-                $write_image = 'imagepng';
-                break;
-            default:
-                $src_img = $image_method = null;
-        }
-        $success = $src_img && @imagecopyresampled(
-                $new_img,
-                $src_img,
-                0, 0, 0, 0,
-                $new_width,
-                $new_height,
-                $img_width,
-                $img_height
-            ) && $write_image($new_img, $new_file_path);
-        // Free up memory (imagedestroy does not delete files):
-        @imagedestroy($src_img);
-        @imagedestroy($new_img);
-        return $success;
-    }
-
-    private function has_error($uploaded_file, $file, $error) {
-        if ($error) {
-            switch($error) {
-                case UPLOAD_ERR_INI_SIZE:
-                    return 'The uploaded file exceeds the upload_max_filesize directive in php.ini.';
-                    break;
-                case UPLOAD_ERR_PARTIAL:
-                    return 'The uploaded file was only partially uploaded.';
-                    break;
-                case UPLOAD_ERR_NO_FILE:
-                    return 'No file was uploaded.';
-                    break;
-                case UPLOAD_ERR_CANT_WRITE:
-                    return 'Failed to write file to disk.';
-                    break;
-                case UPLOAD_ERR_EXTENSION:
-                    return 'File upload stopped by extension.';
-                    break;
-                default:
-                    return $error;
-                    break;
-            }
-        }
-        if (!preg_match($this->options['accept_file_types'], $file->name)) {
-            return 'acceptFileTypes';
-        }
-        if ($uploaded_file && is_uploaded_file($uploaded_file)) {
-            $file_size = filesize($uploaded_file);
-        } else {
-            $file_size = $_SERVER['CONTENT_LENGTH'];
-        }
-
-        if ($this->options['max_file_size'] && (
-                $file_size > $this->options['max_file_size'] ||
-                $file->size > $this->options['max_file_size'])
-        ) {
-            return 'maxFileSize';
-        }
-        if ($this->options['min_file_size'] &&
-            $file_size < $this->options['min_file_size']) {
-            return 'minFileSize';
-        }
-        if (is_int($this->options['max_number_of_files']) && (
-                count($this->get_file_objects()) >= $this->options['max_number_of_files'])
-        ) {
-            return 'maxNumberOfFiles';
-        }
-        return $error;
-    }
-
-    private function trim_file_name($name, $type) {
-        // Remove path information and dots around the filename, to prevent uploading
-        // into different directories or replacing hidden system files.
-        // Also remove control characters and spaces (\x00..\x20) around the filename:
-        $file_name = trim(basename(stripslashes($name)), ".\x00..\x20");
-        // Add missing file extension for known image types:
-        if (strpos($file_name, '.') === false &&
-            preg_match('/^image\/(gif|jpe?g|png)/', $type, $matches)) {
-            $file_name .= '.'.$matches[1];
-        }
-
-        //Ensure that we don't have disallowed characters and add a unique id just to ensure that the file name will be unique
-        $file_name = substr(uniqid(),-5).'-'.$this->_transliterate_characters($file_name);
-
-        //all the characters has to be lowercase
-        $file_name = strtolower($file_name);
-
-        return $file_name;
-    }
-
-    private function _transliterate_characters($file_name)
-    {
-        include($this->default_config_path.'/translit_chars.php');
-        if ( isset($translit_characters))
-        {
-            $file_name = preg_replace(array_keys($translit_characters), array_values($translit_characters), $file_name);
-        }
-
-        $file_name = preg_replace("/([^a-zA-Z0-9\.\-\_]+?){1}/i", '-', $file_name);
-        $file_name = str_replace(" ", "-", $file_name);
-
-        return preg_replace('/\-+/', '-', trim($file_name, '-'));
-    }
-
-    private function orient_image($file_path) {
-        $exif = exif_read_data($file_path);
-        $orientation = intval(@$exif['Orientation']);
-        if (!in_array($orientation, array(3, 6, 8))) {
-            return false;
-        }
-        $image = @imagecreatefromjpeg($file_path);
-        switch ($orientation) {
-            case 3:
-                $image = @imagerotate($image, 180, 0);
-                break;
-            case 6:
-                $image = @imagerotate($image, 270, 0);
-                break;
-            case 8:
-                $image = @imagerotate($image, 90, 0);
-                break;
-            default:
-                return false;
-        }
-        $success = imagejpeg($image, $file_path);
-        // Free up memory (imagedestroy does not delete files):
-        @imagedestroy($image);
-        return $success;
-    }
-
-    private function handle_file_upload($uploaded_file, $name, $size, $type, $error) {
-        $file = new stdClass();
-        $file->name = $this->trim_file_name($name, $type);
-        $file->size = intval($size);
-        $file->type = $type;
-        $error = $this->has_error($uploaded_file, $file, $error);
-        if (!$error && $file->name) {
-            $file_path = $this->options['upload_dir'].$file->name;
-            $append_file = !$this->options['discard_aborted_uploads'] &&
-                is_file($file_path) && $file->size > filesize($file_path);
-            clearstatcache();
-            if ($uploaded_file && is_uploaded_file($uploaded_file)) {
-                // multipart/formdata uploads (POST method uploads)
-                if ($append_file) {
-                    file_put_contents(
-                        $file_path,
-                        fopen($uploaded_file, 'r'),
-                        FILE_APPEND
-                    );
-                } else {
-                    move_uploaded_file($uploaded_file, $file_path);
-                }
-            } else {
-                // Non-multipart uploads (PUT method support)
-                file_put_contents(
-                    $file_path,
-                    fopen('php://input', 'r'),
-                    $append_file ? FILE_APPEND : 0
-                );
-            }
-            $file_size = filesize($file_path);
-            if ($file_size === $file->size) {
-                if ($this->options['orient_image']) {
-                    $this->orient_image($file_path);
-                }
-                $file->url = $this->options['upload_url'].rawurlencode($file->name);
-                foreach($this->options['image_versions'] as $version => $options) {
-                    if ($this->create_scaled_image($file->name, $options)) {
-                        $file->{$version.'_url'} = $options['upload_url']
-                            .rawurlencode($file->name);
-                    }
-                }
-            } else if ($this->options['discard_aborted_uploads']) {
-                unlink($file_path);
-                $file->error = "It seems that this user doesn't have permissions to upload to this folder";
-            }
-            $file->size = $file_size;
-            $file->delete_url = $this->options['script_url']
-                .'?file='.rawurlencode($file->name);
-            $file->delete_type = 'DELETE';
-        } else {
-            $file->error = $error;
-        }
-        return $file;
-    }
-
-    public function get() {
-        $file_name = isset($_REQUEST['file']) ?
-            basename(stripslashes($_REQUEST['file'])) : null;
-        if ($file_name) {
-            $info = $this->get_file_object($file_name);
-        } else {
-            $info = $this->get_file_objects();
-        }
-        header('Content-type: application/json');
-        echo json_encode($info);
-    }
-
-    public function post() {
-        if (isset($_REQUEST['_method']) && $_REQUEST['_method'] === 'DELETE') {
-            return $this->delete();
-        }
-        $upload = isset($_FILES[$this->options['param_name']]) ?
-            $_FILES[$this->options['param_name']] : null;
-        $info = array();
-        if ($upload && is_array($upload['tmp_name'])) {
-            foreach ($upload['tmp_name'] as $index => $value) {
-                $info[] = $this->handle_file_upload(
-                    $upload['tmp_name'][$index],
-                    isset($_SERVER['HTTP_X_FILE_NAME']) ?
-                        $_SERVER['HTTP_X_FILE_NAME'] : $upload['name'][$index],
-                    isset($_SERVER['HTTP_X_FILE_SIZE']) ?
-                        $_SERVER['HTTP_X_FILE_SIZE'] : $upload['size'][$index],
-                    isset($_SERVER['HTTP_X_FILE_TYPE']) ?
-                        $_SERVER['HTTP_X_FILE_TYPE'] : $upload['type'][$index],
-                    $upload['error'][$index]
-                );
-            }
-        } elseif ($upload || isset($_SERVER['HTTP_X_FILE_NAME'])) {
-            $info[] = $this->handle_file_upload(
-                isset($upload['tmp_name']) ? $upload['tmp_name'] : null,
-                isset($_SERVER['HTTP_X_FILE_NAME']) ?
-                    $_SERVER['HTTP_X_FILE_NAME'] : $upload['name'],
-                isset($_SERVER['HTTP_X_FILE_SIZE']) ?
-                    $_SERVER['HTTP_X_FILE_SIZE'] : $upload['size'],
-                isset($_SERVER['HTTP_X_FILE_TYPE']) ?
-                    $_SERVER['HTTP_X_FILE_TYPE'] : $upload['type'],
-                isset($upload['error']) ? $upload['error'] : null
-            );
-        }
-        header('Vary: Accept');
-
-        $redirect = isset($_REQUEST['redirect']) ?
-            stripslashes($_REQUEST['redirect']) : null;
-        if ($redirect) {
-            header('Location: '.sprintf($redirect, rawurlencode($json)));
-            return;
-        }
-        if (isset($_SERVER['HTTP_ACCEPT']) &&
-            (strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false)) {
-            header('Content-type: application/json');
-        } else {
-            header('Content-type: text/plain');
-        }
-        return $info;
-    }
-
-    public function delete() {
-        $file_name = isset($_REQUEST['file']) ?
-            basename(stripslashes($_REQUEST['file'])) : null;
-        $file_path = $this->options['upload_dir'].$file_name;
-        $success = is_file($file_path) && $file_name[0] !== '.' && unlink($file_path);
-        if ($success) {
-            foreach($this->options['image_versions'] as $version => $options) {
-                $file = $options['upload_dir'].$file_name;
-                if (is_file($file)) {
-                    unlink($file);
-                }
-            }
-        }
-        header('Content-type: application/json');
-        echo json_encode($success);
-    }
-
 }

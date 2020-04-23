@@ -22,17 +22,6 @@ class GroceryCrud
     public $default_per_page = 10;
 
     /**
-     * @var string
-     */
-    public $file_upload_allow_file_types = 'gif|jpeg|jpg|png|tiff|doc|docx|txt|odt|xls|xlsx|pdf|ppt|pptx|pps|ppsx';
-
-    /**
-     * e.g. '10MB' (Mega Bytes), '1067KB' (Kilo Bytes), '5000B' (Bytes)
-     * @var string
-     */
-    public $file_upload_max_file_size = '20MB';
-
-    /**
      * You can choose between 'ckeditor','tinymce' or 'markitup'
      * @var string
      */
