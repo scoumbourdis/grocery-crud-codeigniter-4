@@ -4075,33 +4075,36 @@ class GroceryCrud extends grocery_CRUD_States
     }
 
     /**
+     * Change any handle of the translation.
      *
-     * Set a language string directly
      * @param string $handle
-     * @param string $string
+     * @param string $langString
+     * @return $this
      */
-    public function set_lang_string($handle, $lang_string){
-        $this->lang_strings[$handle] = $lang_string;
+    public function setLangString(string $handle, string $langString){
+        $this->lang_strings[$handle] = $langString;
 
         return $this;
     }
 
     /**
-     *
      * Just an alias to get_lang_string method
-     * @param string $handle
+     *
+     * @param $handle
+     * @return string
      */
-    public function l($handle)
+    public function l(string $handle)
     {
         return $this->get_lang_string($handle);
     }
 
     /**
-     *
      * Get the language string of the inserted string handle
+     *
      * @param string $handle
+     * @return string
      */
-    public function get_lang_string($handle)
+    public function get_lang_string(string $handle)
     {
         return $this->lang_strings[$handle];
     }
