@@ -4110,12 +4110,13 @@ class GroceryCrud extends grocery_CRUD_States
     }
 
     /**
+     * Set the language of the CRUD.
      *
-     * Simply set the language
-     * @example english
+     * @example setLanguage('Greek')
      * @param string $language
+     * @return $this
      */
-    public function set_language($language)
+    public function setLanguage(string $language)
     {
         $this->language = $language;
 

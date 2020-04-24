@@ -27,10 +27,54 @@ Grocery CRUD community edition for Codeigniter 4
 | setEdit  | ```$crud->setEdit();``` | Setting the update functionality. This function is rare to use as the default is already enabled. |
 | setExport  | ```$crud->setExport();``` | Setting the export functionality. This function is rare to use as the default is already enabled. |
 | setLangString  | ```$crud->setLangString('action_delete', 'Destroy');``` | Change any handle of the translation. |
+| setLanguage  | ```$crud->setLanguage('Greek');``` | Set the language of the CRUD. All the languages that Grocery CRUD supports are listed [here](#Languages-Support). |
 | setPrint  | ```$crud->setPrint();``` | Setting the print functionality. This function is rare to use as the default is already enabled. |
 | setRead  | ```$crud->setRead();``` | In order to enable the “View” button at your grid you will need to use the function setRead. The view of the form (read only) is false by default. |
 | setRelation  | ```$crud->setRelation('officeCode', 'offices', 'city');``` | This is the function that is used to connect two tables with a 1 to n (1:n) relation.  |
 | setTable  | ```$crud->setTable('customers');``` | This is the database table that the developer will use to create the CRUD.  |
+
+## Languages Support
+
+So far Grocery CRUD is translated into 36 languages:
+
+- Afrikaans
+- Arabic
+- Bengali
+- Bulgarian
+- Catalan
+- Chinese
+- Croatian
+- Czech
+- Danish
+- Dutch
+- English
+- French
+- German
+- Greek
+- Hindi
+- Hungarian
+- Indonesian
+- Italian
+- Japanese
+- Korean
+- Lithuanian
+- Mongolian
+- Norwegian
+- Persian
+- Polish
+- pt-BR.Portuguese
+- pt-PT.Portuguese
+- Romanian
+- Russian
+- Slovak
+- es-UY.Spanish
+- Spanish
+- Thai
+- Turkish
+- Ukrainian
+- Vietnamese
+
+Thank you all for the support of translating 😄
 
 ## Migration from Grocery CRUD v1 to v2 (from Codeigniter 3 to Codeigniter 4)
 
