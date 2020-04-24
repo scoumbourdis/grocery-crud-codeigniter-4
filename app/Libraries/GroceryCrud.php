@@ -530,22 +530,15 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
         return $post_data;
     }
 
-    public function set_model($model_name)
+    /**
+     * @param object $model
+     * @return $this
+     */
+    public function setModel($model)
     {
-        $ci = &get_instance();
-        $ci->load->model('Grocery_crud_model');
+        $this->basic_model = $model;
 
-        $ci->load->model($model_name);
-
-        $temp = explode('/',$model_name);
-        krsort($temp);
-        foreach($temp as $t)
-        {
-            $real_model_name = $t;
-            break;
-        }
-
-        $this->basic_model = $ci->$real_model_name;
+        return $this;
     }
 
     protected function set_ajax_list_queries($state_info = null)
@@ -5016,34 +5009,19 @@ class GroceryCrud extends grocery_CRUD_States
      */
     public function get_table()
     {
-        if($this->basic_db_table_checked)
-        {
+        if($this->basic_db_table_checked) {
             return $this->basic_db_table;
-        }
-        elseif( $this->basic_db_table !== null )
-        {
-            if(!$this->table_exists($this->basic_db_table))
-            {
-                throw new Exception('The table name does not exist. Please check you database and try again.',11);
-                die();
-            }
-            $this->basic_db_table_checked = true;
-            return $this->basic_db_table;
-        }
-        else
-        {
-            //Last try , try to find the table from your view / function name!!! Not suggested but it works .
-            $last_chance_table_name = $this->get_method_name();
-            if($this->table_exists($last_chance_table_name))
-            {
-                $this->set_table($last_chance_table_name);
-            }
-            $this->basic_db_table_checked = true;
-            return $this->basic_db_table;
-
         }
 
-        return false;
+        if ($this->basic_db_table === null) {
+            throw new Exception('The table name can\'t be empty. Please use setTable to add a basic table name');
+        }
+
+        if(!$this->table_exists($this->basic_db_table)) {
+            throw new Exception('The table name does not exist. Please check you database and try again.',11);
+        }
+        $this->basic_db_table_checked = true;
+        return $this->basic_db_table;
     }
 
     /**

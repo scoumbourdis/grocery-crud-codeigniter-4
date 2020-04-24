@@ -27,7 +27,8 @@ Grocery CRUD community edition for Codeigniter 4
 | setEdit  | ```$crud->setEdit();``` | Setting the update functionality. This function is rare to use as the default is already enabled. |
 | setExport  | ```$crud->setExport();``` | Setting the export functionality. This function is rare to use as the default is already enabled. |
 | setLangString  | ```$crud->setLangString('action_delete', 'Destroy');``` | Change any handle of the translation. |
-| setLanguage  | ```$crud->setLanguage('Greek');``` | Set the language of the CRUD. All the languages that Grocery CRUD supports are listed [here](#Languages-Support). |
+| setLanguage  | ```$crud->setLanguage('Greek');``` | Set the language of the CRUD. All the languages that Grocery CRUD supports are listed at the [Languages Support](#languages-support) section. |
+| setModel  | ```$crud->setModel(model('App\Models\MyCustomModel'));``` | Changing the default model with a custom one. |
 | setPrint  | ```$crud->setPrint();``` | Setting the print functionality. This function is rare to use as the default is already enabled. |
 | setRead  | ```$crud->setRead();``` | In order to enable the “View” button at your grid you will need to use the function setRead. The view of the form (read only) is false by default. |
 | setRelation  | ```$crud->setRelation('officeCode', 'offices', 'city');``` | This is the function that is used to connect two tables with a 1 to n (1:n) relation.  |
