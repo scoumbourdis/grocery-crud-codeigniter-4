@@ -3541,12 +3541,13 @@ class GroceryCrud extends grocery_CRUD_States
      * Change the default primary key for a specific table.
      * If the $table_name is NULL then the primary key is for the default table name that we added at the set_table method
      *
-     * @param string $primary_key_field
-     * @param string $table_name
+     * @param string $primaryKey
+     * @param null $tableName
+     * @return $this
      */
-    public function set_primary_key($primary_key_field, $table_name = null)
+    public function setPrimaryKey(string $primaryKey, $tableName = null)
     {
-        $this->primary_keys[] = array('field_name' => $primary_key_field, 'table_name' => $table_name);
+        $this->primary_keys[] = array('field_name' => $primaryKey, 'table_name' => $tableName);
 
         return $this;
     }
