@@ -81,7 +81,7 @@ class GroceryCrudModel extends Model {
     	//set_relation_n_n special queries. We prefer sub queries from a simple join for the relation_n_n as it is faster and more stable on big tables.
     	if(!empty($this->relation_n_n))
     	{
-			$select = $this->relation_n_n_queries($select);
+			$select = $this->relationNtoNQueries($select);
     	}
 
         $this->builder = $this->builder->select($select, false);
@@ -107,13 +107,13 @@ class GroceryCrudModel extends Model {
     	$this->primary_keys[$table_name] = $field_name;
     }
 
-    protected function relation_n_n_queries($select)
+    protected function relationNtoNQueries($select)
     {
     	$this_table_primary_key = $this->get_primary_key();
     	foreach($this->relation_n_n as $relation_n_n)
     	{
     		list($field_name, $relation_table, $selection_table, $primary_key_alias_to_this_table,
-    					$primary_key_alias_to_selection_table, $title_field_selection_table, $priority_field_relation_table) = array_values((array)$relation_n_n);
+    					$primary_key_alias_to_selection_table, $title_field_selection_table) = array_values((array)$relation_n_n);
 
     		$primary_key_selection_table = $this->get_primary_key($selection_table);
 
@@ -181,18 +181,6 @@ class GroceryCrudModel extends Model {
 
     function get_total_results()
     {
-        // A fast way to calculate the total results
-        $key = $this->get_primary_key();
-
-    	//set_relation_n_n special queries. We prefer sub queries from a simple join for the relation_n_n as it is faster and more stable on big tables.
-    	if(!empty($this->relation_n_n))
-    	{
-    		$select = "{$this->table_name}." . $key;
-    		$select = $this->relation_n_n_queries($select);
-
-    		$this->db->select($select, false);
-    	}
-        
         $totalResults = $this->builder->countAllResults($this->table_name);
 
         $this->builder = null;
@@ -323,7 +311,7 @@ class GroceryCrudModel extends Model {
 
     function get_relation_n_n_selection_array($primary_key_value, $field_info)
     {
-    	$select = "";
+    	$select = '';
     	$related_field_title = $field_info->title_field_selection_table;
     	$use_template = strpos($related_field_title,'{') !== false;;
     	$field_name_hash = $this->_unique_field_name($related_field_title);
@@ -336,26 +324,23 @@ class GroceryCrudModel extends Model {
     	{
     		$select .= "$related_field_title as $field_name_hash";
     	}
-    	$this->db->select('*, '.$select,false);
+    	$this->builder = $this->db->table($field_info->relation_table);
+        $this->builder = $this->builder->select('*, '.$select,false);
 
     	$selection_primary_key = $this->get_primary_key($field_info->selection_table);
 
-    	if(empty($field_info->priority_field_relation_table))
-    	{
-    		if(!$use_template){
-    			$this->db->order_by("{$field_info->selection_table}.{$field_info->title_field_selection_table}");
-    		}
-    	}
-    	else
-    	{
-    		$this->db->order_by("{$field_info->relation_table}.{$field_info->priority_field_relation_table}");
-    	}
-    	$this->db->where($field_info->primary_key_alias_to_this_table, $primary_key_value);
-    	$this->db->join(
+        if(!$use_template){
+            $this->builder = $this->builder->orderBy("{$field_info->selection_table}.{$field_info->title_field_selection_table}");
+        }
+
+        $this->builder = $this->builder->where($field_info->primary_key_alias_to_this_table, $primary_key_value)
+            ->join(
     			$field_info->selection_table,
     			"{$field_info->relation_table}.{$field_info->primary_key_alias_to_selection_table} = {$field_info->selection_table}.{$selection_primary_key}"
     		);
-    	$results = $this->db->get($field_info->relation_table)->result();
+    	$results = $this->builder->get()->getResult();
+
+    	$this->builder = null;
 
     	$results_array = array();
     	foreach($results as $row)
@@ -384,16 +369,21 @@ class GroceryCrudModel extends Model {
     	{
     		$select .= "$related_field_title as $field_name_hash";
     	}
-    	$this->db->select('*, '.$select,false);
+
+        $this->builder = $this->db->table($field_info->selection_table);
+    	$this->builder = $this->builder->select('*, ' . $select, false);
 
     	if($use_where_clause){
-    		$this->db->where($field_info->where_clause);
+            $this->builder = $this->builder->where($field_info->where_clause);
     	}
 
     	$selection_primary_key = $this->get_primary_key($field_info->selection_table);
-        if(!$use_template)
-        	$this->db->order_by("{$field_info->selection_table}.{$field_info->title_field_selection_table}");
-        $results = $this->db->get($field_info->selection_table)->result();
+        if(!$use_template) {
+            $this->builder = $this->builder->orderBy("{$field_info->selection_table}.{$field_info->title_field_selection_table}");
+        }
+        $results = $this->builder->get()->getResult();
+
+        $this->builder = null;
 
         $results_array = array();
         foreach($results as $row)
@@ -425,16 +415,8 @@ class GroceryCrudModel extends Model {
 	    		$this->db->where($where_array);
 				$count = $this->db->from($field_info->relation_table)->count_all_results();
 
-				if($count == 0)
-				{
-					if(!empty($field_info->priority_field_relation_table))
-						$where_array[$field_info->priority_field_relation_table] = $counter;
-
+				if($count == 0) {
 					$this->db->insert($field_info->relation_table, $where_array);
-
-				}elseif($count >= 1 && !empty($field_info->priority_field_relation_table))
-				{
-					$this->db->update( $field_info->relation_table, array($field_info->priority_field_relation_table => $counter) , $where_array);
 				}
 
 				$counter++;

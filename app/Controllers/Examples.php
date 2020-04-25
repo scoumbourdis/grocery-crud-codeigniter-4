@@ -12,10 +12,10 @@ class Examples extends BaseController
 
 	    $output = $crud->render();
 
-		return $this->_example_output($output);
+		return $this->_exampleOutput($output);
 	}
 
-    public function _example_output($output = null) {
+    private function _exampleOutput($output = null) {
         return view('example', (array)$output);
     }
 
