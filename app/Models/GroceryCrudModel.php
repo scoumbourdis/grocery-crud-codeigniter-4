@@ -397,37 +397,42 @@ class GroceryCrudModel extends Model {
 
     function db_relation_n_n_update($field_info, $post_data ,$main_primary_key)
     {
-    	$this->db->where($field_info->primary_key_alias_to_this_table, $main_primary_key);
-    	if(!empty($post_data))
-    		$this->db->where_not_in($field_info->primary_key_alias_to_selection_table , $post_data);
-    	$this->db->delete($field_info->relation_table);
+        $this->builder = $this->db->table($field_info->relation_table);
 
-    	$counter = 0;
-    	if(!empty($post_data))
-    	{
-    		foreach($post_data as $primary_key_value)
-	    	{
-				$where_array = array(
+        $this->builder->where($field_info->primary_key_alias_to_this_table, $main_primary_key);
+    	if(!empty($post_data)) {
+            $this->builder->whereNotIn($field_info->primary_key_alias_to_selection_table, $post_data);
+        }
+
+        $this->builder->delete();
+
+        $this->builder = $this->db->table($field_info->relation_table);
+
+    	if(!empty($post_data)) {
+    		foreach($post_data as $primary_key_value) {
+				$insertData = array(
 	    			$field_info->primary_key_alias_to_this_table => $main_primary_key,
 	    			$field_info->primary_key_alias_to_selection_table => $primary_key_value,
 	    		);
 
-	    		$this->db->where($where_array);
-				$count = $this->db->from($field_info->relation_table)->count_all_results();
+                $this->builder->where($insertData);
+				$count = $this->builder->countAllResults($field_info->relation_table);
 
-				if($count == 0) {
-					$this->db->insert($field_info->relation_table, $where_array);
+				// Insert data only when they doesn't exist so we will not have duplicates
+				if($count === 0) {
+                    $this->builder = null;
+                    $this->builder = $this->db->table($field_info->relation_table);
+                    $this->builder->insert($insertData);
 				}
-
-				$counter++;
 	    	}
     	}
     }
 
     function db_relation_n_n_delete($field_info, $main_primary_key)
     {
-    	$this->db->where($field_info->primary_key_alias_to_this_table, $main_primary_key);
-    	$this->db->delete($field_info->relation_table);
+        $this->builder = $this->db->table($field_info->relation_table);
+        $this->builder->where($field_info->primary_key_alias_to_this_table, $main_primary_key);
+    	$this->builder->delete();
     }
 
     function get_field_types_basic_table()
