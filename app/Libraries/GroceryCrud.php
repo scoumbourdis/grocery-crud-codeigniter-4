@@ -3483,8 +3483,13 @@ class GroceryCrud extends grocery_CRUD_States
      * @param array $errors
      * @return $this
      */
-    function setRule(string $field, $label = '', $rules = '', $errors = []) {
-        $this->validation_rules[$field] = ['field' => $field, 'label' => $label, 'rules' => $rules, 'errors' => $errors];
+    function setRule(string $field, string $label, string $rules, array $errors = []) {
+        $this->validation_rules[$field] = [
+            'field' => $field,
+            'label' => $label,
+            'rules' => $rules,
+            'errors' => $errors
+        ];
 
         return $this;
     }

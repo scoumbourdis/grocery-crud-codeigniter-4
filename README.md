@@ -34,6 +34,7 @@ Grocery CRUD community edition for Codeigniter 4
 | setRead  | ```$crud->setRead();``` | In order to enable the “View” button at your grid you will need to use the function setRead. The view of the form (read only) is false by default. |
 | setRelation  | ```$crud->setRelation('officeCode', 'offices', 'city');``` | This is the function that is used to connect two tables with a 1 to n (1:n) relation.  |
 | setRelationNtoN  | ```$crud->setRelationNtoN('actors', 'film_actor', 'actor', 'film_id', 'actor_id', 'fullname');``` | A connection for 3 tables with n-n relation (also known as n:n or m:n).  |
+| setRule  | <code>$crud->setRule('username', 'Username', 'required&#124;valid_email');</code> | The setRule function is used to set a validation rule at the backend. Same as Codeigniter 4 [setRule](https://codeigniter4.github.io/userguide/libraries/validation.html#setrule)  |
 | setTable  | ```$crud->setTable('customers');``` | This is the database table that the developer will use to create the CRUD.  |
 
 ## Languages Support
