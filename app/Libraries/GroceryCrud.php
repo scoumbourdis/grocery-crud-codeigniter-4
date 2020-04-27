@@ -738,7 +738,7 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
                 $field_name = $add_field->field_name;
                 if(in_array( $field_name, $unique_fields) )
                 {
-                    $form_validation->setRules( $field_name,
+                    $form_validation->setRule( $field_name,
                         $field_types[$field_name]->display_as,
                         'is_unique['.$this->basic_db_table.'.'.$field_name.']');
                 }
@@ -812,7 +812,7 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
             {
                 $field_name = $edit_field->field_name;
 
-                // Workaround as Codeigniter setRules has a bug with array and doesn't work with required fields.
+                // Workaround as Codeigniter setRule has a bug with array and doesn't work with required fields.
                 // We are basically doing the check here!
                 if (array_key_exists($field_name, $this->relation_n_n) && in_array($field_name, $required_fields)) {
                     if (!array_key_exists($field_name, $_POST)) {
@@ -3457,20 +3457,6 @@ class GroceryCrud extends grocery_CRUD_States
     {
         $this->columns = $columns;
 
-        return $this;
-    }
-
-    /**
-     * The method setRules is used to combine multiple setRule methods into one.
-     *
-     * @param array $rules
-     * @return $this
-     */
-    function setRules(array $rules)
-    {
-        foreach($rules as $field_array) {
-            $this->validation_rules[$field_array['field']] = $field_array;
-        }
         return $this;
     }
 

@@ -94,11 +94,14 @@ If you are migrating from version 1 to 2 you will need to consider the below mig
 * `add_fields` is now renamed to `addFields` and it only gets an array as an argument 
 * `clone_fields` is now renamed to `cloneFields` and it only gets an array as an argument 
 * `columns` now only gets an array as an argument
+* `set_rules` is now renamed to `setRule` and it is supporting only one rule at the time (currently there is no ability 
+to add multiple rules at once)
 
 ### Removed features/functions
 * `set_field_upload` is now removed. The upload functionality was a feature that was causing security issues as it 
 could work only to a public folder and the uploader was not up to date and it was causing confusion to the developers 
 that just wanted to see it working and unfortunately they couldn't.
+
 
 * "Read" and "Clone" feature is disabled by default. You can enable them by adding `$crud->setRead();` or `$crud->setClone();` on your CRUD.
 
