@@ -2734,7 +2734,13 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
         $this->theme_config = $config;
     }
 
-    public function set_theme($theme = null)
+    /**
+     * The setTheme is used in order to change the default theme.
+     *
+     * @param string $theme
+     * @return $this
+     */
+    public function setTheme(string $theme)
     {
         $this->theme = $theme;
 
@@ -4453,7 +4459,7 @@ class GroceryCrud extends grocery_CRUD_States
         }
 
         if ($this->theme === null && !empty($this->config->default_theme)) {
-            $this->set_theme($this->config->default_theme);
+            $this->setTheme($this->config->default_theme);
         }
     }
 
@@ -4521,7 +4527,7 @@ class GroceryCrud extends grocery_CRUD_States
                 }
 
                 if($this->theme === null)
-                    $this->set_theme($this->default_theme);
+                    $this->setTheme($this->default_theme);
                 $this->setThemeBasics();
 
                 $this->set_basic_Layout();
@@ -4540,7 +4546,7 @@ class GroceryCrud extends grocery_CRUD_States
                 }
 
                 if($this->theme === null)
-                    $this->set_theme($this->default_theme);
+                    $this->setTheme($this->default_theme);
                 $this->setThemeBasics();
 
                 $this->set_basic_Layout();
@@ -4557,7 +4563,7 @@ class GroceryCrud extends grocery_CRUD_States
                 }
 
                 if($this->theme === null)
-                    $this->set_theme($this->default_theme);
+                    $this->setTheme($this->default_theme);
                 $this->setThemeBasics();
 
                 $this->set_basic_Layout();
@@ -4616,7 +4622,7 @@ class GroceryCrud extends grocery_CRUD_States
                 }
 
                 if($this->theme === null)
-                    $this->set_theme($this->default_theme);
+                    $this->setTheme($this->default_theme);
                 $this->setThemeBasics();
 
                 $this->set_basic_Layout();
@@ -4631,7 +4637,7 @@ class GroceryCrud extends grocery_CRUD_States
             case 8://ajax_list_info
 
                 if($this->theme === null)
-                    $this->set_theme($this->default_theme);
+                    $this->setTheme($this->default_theme);
                 $this->setThemeBasics();
 
                 $this->set_basic_Layout();
@@ -4666,7 +4672,7 @@ class GroceryCrud extends grocery_CRUD_States
                 }
 
                 if($this->theme === null)
-                    $this->set_theme($this->default_theme);
+                    $this->setTheme($this->default_theme);
                 $this->setThemeBasics();
 
                 $this->set_basic_Layout();
@@ -4687,7 +4693,7 @@ class GroceryCrud extends grocery_CRUD_States
                 }
 
                 if($this->theme === null)
-                    $this->set_theme($this->default_theme);
+                    $this->setTheme($this->default_theme);
                 $this->setThemeBasics();
 
                 $this->set_basic_Layout();
@@ -4705,7 +4711,7 @@ class GroceryCrud extends grocery_CRUD_States
                 }
 
                 if($this->theme === null)
-                    $this->set_theme($this->default_theme);
+                    $this->setTheme($this->default_theme);
                 $this->setThemeBasics();
 
                 $this->set_basic_Layout();
@@ -4739,7 +4745,7 @@ class GroceryCrud extends grocery_CRUD_States
                 }
 
                 if ($this->theme === null) {
-                    $this->set_theme($this->default_theme);
+                    $this->setTheme($this->default_theme);
                 }
                 $this->setThemeBasics();
 

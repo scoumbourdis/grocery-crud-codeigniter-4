@@ -38,6 +38,7 @@ Grocery CRUD community edition for Codeigniter 4
 | setSubject  | ```$crud->setSubject('Customer', 'Customers');``` | Set a subject title for all the CRUD operations for the current CRUD.  |
 | setTable  | ```$crud->setTable('customers');``` | This is the database table that the developer will use to create the CRUD.  |
 | setTexteditor  | ```$crud->setTexteditor(['description', 'full_description']);``` |  Specifying the fields that will open with a texteditor (ckeditor). |
+| setTheme  | ```$crud->setTheme('datatables');``` |  The setTheme is used in order to change the default theme (flexigrid). |
 | unsetTexteditor  | ```$crud->unsetTexteditor(['description', 'full_description']);``` |  Unsets the texteditor for the selected fields. This function is really rare to use as by default there is not any load of the texteditor for optimising purposes. |
 
 ## Languages Support
@@ -82,6 +83,13 @@ So far Grocery CRUD is translated into 36 languages:
 - Vietnamese
 
 Thank you all for the support of translating 😄
+
+## Themes support
+
+- flexigrid (default)
+- datatables
+- bootstrap (only after [purchase](https://www.grocerycrud.com/bootstrap-theme))
+- boostrap-v4 (only after [purchase](https://www.grocerycrud.com/bootstrap-theme))
 
 ## Migration from Grocery CRUD v1 to v2 (from Codeigniter 3 to Codeigniter 4)
 
