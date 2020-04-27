@@ -37,6 +37,8 @@ Grocery CRUD community edition for Codeigniter 4
 | setRule  | <code>$crud->setRule('username', 'Username', 'required&#124;valid_email');</code> | The setRule function is used to set a validation rule at the backend. Same as Codeigniter 4 [setRule](https://codeigniter4.github.io/userguide/libraries/validation.html#setrule)  |
 | setSubject  | ```$crud->setSubject('Customer', 'Customers');``` | Set a subject title for all the CRUD operations for the current CRUD.  |
 | setTable  | ```$crud->setTable('customers');``` | This is the database table that the developer will use to create the CRUD.  |
+| setTexteditor  | ```$crud->setTexteditor(['description', 'full_description']);``` |  Specifying the fields that will open with a texteditor (ckeditor). |
+| unsetTexteditor  | ```$crud->unsetTexteditor(['description', 'full_description']);``` |  Unsets the texteditor for the selected fields. This function is really rare to use as by default there is not any load of the texteditor for optimising purposes. |
 
 ## Languages Support
 
@@ -103,7 +105,11 @@ to add multiple rules at once)
 could work only to a public folder and the uploader was not up to date and it was causing confusion to the developers 
 that just wanted to see it working and unfortunately they couldn't.
 
+### Changing default configurations/values
 
-* "Read" and "Clone" feature is disabled by default. You can enable them by adding `$crud->setRead();` or `$crud->setClone();` on your CRUD.
+* "Read" and "Clone" feature is disabled by default. You can enable them by adding `$crud->setRead();` or 
+`$crud->setClone();` on your CRUD.
+* By default texteditor is disabled for performance purposes. In case you would like to enable texteditor you will 
+need to specify which fields with `$crud->setTexteditor`
 
 For more information, visit http://www.grocerycrud.com

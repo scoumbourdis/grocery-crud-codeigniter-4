@@ -82,10 +82,8 @@ class grocery_CRUD_Field_Types
 
             switch ($real_type) {
                 case 'text':
-                    if(!empty($this->unset_texteditor) && in_array($field_info->name,$this->unset_texteditor))
-                        $field_info->extras = false;
-                    else
-                        $field_info->extras = 'text_editor';
+                    $field_info->extras =
+                        in_array($field_info->name, $this->set_texteditor) ? 'text_editor' : false;
                     break;
 
                 case 'relation':
@@ -3389,8 +3387,10 @@ class GroceryCrud extends grocery_CRUD_States
     protected $crud_url_path		= null;
     protected $list_url_path		= null;
 
+    /* The setters */
+    protected $set_texteditor		= array();
+
     /* The unsetters */
-    protected $unset_texteditor		= array();
     protected $unset_add			= false;
     protected $unset_edit			= false;
     protected $unset_delete			= false;
@@ -3514,24 +3514,30 @@ class GroceryCrud extends grocery_CRUD_States
     }
 
     /**
-     * Unsets the texteditor of the selected fields
+     * Specifying the fields that will open with a texteditor (ckeditor).
      *
-     * @access	public
-     * @param	string
-     * @param	array
-     * @return	void
+     * @param array $fields
+     * @return $this
      */
-    public function unset_texteditor()
-    {
-        $args = func_get_args();
+    public function setTexteditor(array $fields) {
+        $this->set_texteditor = $fields;
 
-        if(isset($args[0]) && is_array($args[0]))
-        {
-            $args = $args[0];
-        }
-        foreach($args as $arg)
-        {
-            $this->unset_texteditor[] = $arg;
+        return $this;
+    }
+
+    /**
+     * Unsets the texteditor for the selected fields. This function is really rare to use as by default there is not
+     * any load of the texteditor for optimising purposes.
+     *
+     * @param array $fields
+     * @return $this
+     */
+    public function unsetTexteditor(array $fields)
+    {
+        foreach ($fields as $field) {
+            if(in_array($field, $this->set_texteditor)) {
+                unset($this->set_texteditor[array_search($field, $this->set_texteditor)]);
+            }
         }
 
         return $this;
