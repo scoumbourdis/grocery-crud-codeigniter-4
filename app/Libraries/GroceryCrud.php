@@ -843,17 +843,18 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
                     $primary_key = $this->get_primary_key();
                     $field_name_value = $_POST[$field_name];
 
-                    $this->basic_model->where($primary_key,$state_info->primary_key);
+                    $this->basic_model->setBuilder($this->basic_db_table);
+                    $this->basic_model->where($primary_key, $state_info->primary_key);
                     $row = $this->basic_model->get_row();
 
                     if(!property_exists($row, $field_name)) {
                         throw new Exception("The field name doesn't exist in the database. ".
-                            "Please use the unique fields only for fields ".
-                            "that exist in the database");
+                            "Please use the unique fields only for fields that exist in the database");
                     }
 
                     $previous_field_name_value = $row->$field_name;
 
+                    // Only check if the value is unique on change
                     if(!empty($previous_field_name_value) && $previous_field_name_value != $field_name_value) {
                         $form_validation->setRule($field_name,
                             $field_types[$field_name]->display_as,
@@ -3342,6 +3343,11 @@ class GroceryCrud extends grocery_CRUD_States
     const	JQUERY_UI_JS 	= "jquery-ui-1.10.3.custom.min.js";
     const	JQUERY_UI_CSS 	= "jquery-ui-1.10.1.custom.min.css";
 
+    const THEME_FLEXIGRID    = 'flexigrid';
+    const THEME_DATATABLES   = 'datatables';
+    const THEME_BOOTSTRAP_V3 = 'bootstrap';
+    const THEME_BOOTSTRAP_V4 = 'bootstrap-v4';
+
     protected $state_code 			= null;
     protected $state_info 			= null;
     protected $columns				= null;
@@ -5016,16 +5022,16 @@ class GroceryCrud extends grocery_CRUD_States
      *
      * @return grocery_CRUD
      */
-    public function unique_fields()
+
+    /**
+     * Check if the data for the specified fields are unique. This is used at the insert and the update operation.
+     *
+     * @param array $uniqueFields
+     * @return $this
+     */
+    public function uniqueFields(array $uniqueFields)
     {
-        $args = func_get_args();
-
-        if(isset($args[0]) && is_array($args[0]))
-        {
-            $args = $args[0];
-        }
-
-        $this->_unique_fields = $args;
+        $this->_unique_fields = $uniqueFields;
 
         return $this;
     }

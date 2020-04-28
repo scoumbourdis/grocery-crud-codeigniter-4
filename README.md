@@ -39,6 +39,7 @@ Grocery CRUD community edition for Codeigniter 4
 | setTable  | ```$crud->setTable('customers');``` | This is the database table that the developer will use to create the CRUD.  |
 | setTexteditor  | ```$crud->setTexteditor(['description', 'full_description']);``` |  Specifying the fields that will open with a texteditor (ckeditor). |
 | setTheme  | ```$crud->setTheme('datatables');``` |  The setTheme is used in order to change the default theme (flexigrid). |
+| uniqueFields  | ```$crud->uniqueFields(['url', 'reference_id']);``` |  Check if the data for the specified fields are unique. This is used at the insert and the update operation. |
 | unsetTexteditor  | ```$crud->unsetTexteditor(['description', 'full_description']);``` |  Unsets the texteditor for the selected fields. This function is really rare to use as by default there is not any load of the texteditor for optimising purposes. |
 
 ## Languages Support
@@ -112,6 +113,8 @@ to add multiple rules at once)
 * `set_field_upload` is now removed. The upload functionality was a feature that was causing security issues as it 
 could work only to a public folder and the uploader was not up to date and it was causing confusion to the developers 
 that just wanted to see it working and unfortunately they couldn't.
+* Removing the ability to use Grocery CRUD as preloaded library. For example `$this->grocery_crud->render();`. This was
+ causing bugs and unwanted issues as the library most of the cases wasn't initialised correctly.  
 
 ### Changing default configurations/values
 

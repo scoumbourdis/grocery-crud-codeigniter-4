@@ -15,6 +15,20 @@ class Examples extends BaseController
 		return $this->_exampleOutput($output);
 	}
 
+    function offices_management () {
+        $crud = new GroceryCrud();
+
+        $crud->setTheme('datatables');
+        $crud->setTable('offices');
+        $crud->setSubject('Office');
+        $crud->requiredFields(['city']);
+        $crud->columns(['city','country','phone','addressLine1','postalCode']);
+
+        $output = $crud->render();
+
+        return $this->_exampleOutput($output);
+    }
+
     private function _exampleOutput($output = null) {
         return view('example', (array)$output);
     }

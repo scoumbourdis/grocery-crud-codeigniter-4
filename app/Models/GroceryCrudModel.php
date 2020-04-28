@@ -93,11 +93,9 @@ class GroceryCrudModel extends Model {
     	return $results;
     }
 
-    public function get_row($table_name = null)
+    public function get_row()
     {
-    	$table_name = $table_name === null ? $this->table_name : $table_name;
-
-    	return $this->db->get($table_name)->row();
+    	return $this->builder->get()->getRow();
     }
 
     public function set_primary_key($field_name, $table_name = null)
