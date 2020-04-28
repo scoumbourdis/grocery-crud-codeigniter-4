@@ -3674,11 +3674,11 @@ class GroceryCrud extends grocery_CRUD_States
     }
 
     /**
-     * Unsets the add operation from the list
+     * Removing the insert functionality at the current CRUD.
      *
-     * @return	void
+     * @return $this
      */
-    public function unset_add()
+    public function unsetAdd()
     {
         $this->unset_add = true;
         $this->unset_clone = true;
@@ -3818,16 +3818,15 @@ class GroceryCrud extends grocery_CRUD_States
         return $this;
     }
 
-    public function unset_add_fields()
+    /**
+     * Unset (do not display) the specified fields for the insert form.
+     *
+     * @param array $fields
+     * @return $this
+     */
+    public function unsetAddFields(array $fields)
     {
-        $args = func_get_args();
-
-        if(isset($args[0]) && is_array($args[0]))
-        {
-            $args = $args[0];
-        }
-
-        $this->unset_add_fields = $args;
+        $this->unset_add_fields = $fields;
 
         return $this;
     }

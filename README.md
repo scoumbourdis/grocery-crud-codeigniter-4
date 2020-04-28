@@ -40,6 +40,8 @@ Grocery CRUD community edition for Codeigniter 4
 | setTexteditor  | ```$crud->setTexteditor(['description', 'full_description']);``` |  Specifying the fields that will open with a texteditor (ckeditor). |
 | setTheme  | ```$crud->setTheme('datatables');``` |  The setTheme is used in order to change the default theme (flexigrid). |
 | uniqueFields  | ```$crud->uniqueFields(['url', 'reference_id']);``` |  Check if the data for the specified fields are unique. This is used at the insert and the update operation. |
+| unsetAdd  | ```$crud->unsetAdd();``` |  Removing the insert functionality at the current CRUD. |
+| unsetAddFields  | ```$crud->unsetAddFields(['address_1', 'address_2', 'credit_limit']);``` |  Unset (do not display) the specified fields for the insert form. |
 | unsetTexteditor  | ```$crud->unsetTexteditor(['description', 'full_description']);``` |  Unsets the texteditor for the selected fields. This function is really rare to use as by default there is not any load of the texteditor for optimising purposes. |
 
 ## Languages Support
