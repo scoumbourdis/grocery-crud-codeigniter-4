@@ -42,6 +42,8 @@ Grocery CRUD community edition for Codeigniter 4
 | uniqueFields  | ```$crud->uniqueFields(['url', 'reference_id']);``` |  Check if the data for the specified fields are unique. This is used at the insert and the update operation. |
 | unsetAdd  | ```$crud->unsetAdd();``` |  Removing the insert functionality at the current CRUD. |
 | unsetAddFields  | ```$crud->unsetAddFields(['address_1', 'address_2', 'credit_limit']);``` |  Unset (do not display) the specified fields for the insert form. |
+| unsetBootstrap  | ```$crud->unsetBootstrap();``` |  Do not load Bootstrap CSS. This is used when the Bootstrap CSS is already loaded at the template. |
+| unsetClone  | ```$crud->unsetClone();``` |  The method unsetClone is removing completely the Clone operation for the end-user. |
 | unsetTexteditor  | ```$crud->unsetTexteditor(['description', 'full_description']);``` |  Unsets the texteditor for the selected fields. This function is really rare to use as by default there is not any load of the texteditor for optimising purposes. |
 
 ## Languages Support

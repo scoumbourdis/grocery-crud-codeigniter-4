@@ -3583,12 +3583,11 @@ class GroceryCrud extends grocery_CRUD_States
     }
 
     /**
-     * Unsets just the twitter bootstrap libraries from the js and css. This function can be used if there is already twitter bootstrap files included
-     * in the main template. If you are already using a bootstrap template then it's not necessary to load the files again.
+     * Do not load Bootstrap CSS. This is used when the Bootstrap CSS is already loaded at the template.
      *
-     * @return	void
+     * @return $this
      */
-    public function unset_bootstrap()
+    public function unsetBootstrap()
     {
         $this->unset_bootstrap = true;
 
@@ -3658,17 +3657,6 @@ class GroceryCrud extends grocery_CRUD_States
      */
     public function setRead() {
         $this->unset_read = false;
-
-        return $this;
-    }
-
-    /**
-     * Enabling the clone functionality for the datagrid. Clone is basically copying all the data to an insert form.
-     *
-     * @return $this
-     */
-    public function setClone() {
-        $this->unset_clone = false;
 
         return $this;
     }
@@ -3886,21 +3874,25 @@ class GroceryCrud extends grocery_CRUD_States
     }
 
     /**
-     * Unsets everything that has to do with buttons or links with clone
-     * @access	public
-     * @return	void
+     * Enabling the clone functionality for the datagrid. Clone is basically copying all the data to an insert form.
+     *
+     * @return $this
      */
-    public function unset_clone()
-    {
-        $this->unset_clone = true;
+    public function setClone() {
+        $this->unset_clone = false;
+        $this->unset_add = false;
 
         return $this;
     }
 
-    public function set_clone()
+    /**
+     * The method unsetClone is removing completely the Clone operation for the end-user.
+     *
+     * @return $this
+     */
+    public function unsetClone()
     {
-        $this->unset_clone = false;
-        $this->unset_add = false;
+        $this->unset_clone = true;
 
         return $this;
     }
