@@ -44,7 +44,10 @@ Grocery CRUD community edition for Codeigniter 4
 | unsetAddFields  | ```$crud->unsetAddFields(['address_1', 'address_2', 'credit_limit']);``` |  Unset (do not display) the specified fields for the insert form. |
 | unsetBootstrap  | ```$crud->unsetBootstrap();``` |  Do not load Bootstrap CSS. This is used when the Bootstrap CSS is already loaded at the template. |
 | unsetClone  | ```$crud->unsetClone();``` |  The method unsetClone is removing completely the Clone operation for the end-user. |
+| unsetCloneFields  | ```$crud->unsetCloneFields(['address_1', 'address_2', 'credit_limit']);``` |  Unset (do not display) the specified fields from the clone form. |
 | unsetTexteditor  | ```$crud->unsetTexteditor(['description', 'full_description']);``` |  Unsets the texteditor for the selected fields. This function is really rare to use as by default there is not any load of the texteditor for optimising purposes. |
+
+### Callback Functionality (Changing or enhancing the default behavior with callbacks)
 
 ## Languages Support
 

@@ -3833,15 +3833,15 @@ class GroceryCrud extends grocery_CRUD_States
         return $this;
     }
 
-    public function unset_clone_fields()
+    /**
+     * Unset (do not display) the specified fields from the clone form.
+     *
+     * @param array $fields
+     * @return $this
+     */
+    public function unsetCloneFields(array $fields)
     {
-        $args = func_get_args();
-
-        if (isset($args[0]) && is_array($args[0])) {
-            $args = $args[0];
-        }
-
-        $this->unset_clone_fields = $args;
+        $this->unset_clone_fields = $fields;
 
         return $this;
     }
