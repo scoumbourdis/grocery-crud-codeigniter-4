@@ -2,6 +2,27 @@ Grocery CRUD community edition for Codeigniter 4
 =============
 ⚠️ Warning: Work in progress! This repository is not in a working stage just yet!
 
+## Usage example
+
+### Simplest example
+
+	$crud = new GroceryCrud();
+	$crud->setTable('customers');
+	$output = $crud->render();
+
+### Most common usage example
+
+    $crud = new GroceryCrud();
+    $crud->setTable('customers')
+        ->setSubject('Customer', 'Customers')
+        ->columns(['customerName', 'contactLastName', 'phone', 'city', 'country', 'creditLimit'])
+        ->displayAs('customerName', 'Name')
+        ->displayAs('contactLastName', 'Last Name')
+        ->fields(['customerName', 'contactLastName', 'phone', 'city', 'country', 'creditLimit'])
+        ->requiredFields(['customerName', 'contactLastName']);
+    
+    $output = $crud->render();
+
 ## API and Functions list
 
 | Function name  | Example | Small description |
@@ -47,16 +68,16 @@ Grocery CRUD community edition for Codeigniter 4
 | unsetClone  | ```$crud->unsetClone();``` |  The method unsetClone is removing completely the Clone operation for the end-user. |
 | unsetCloneFields  | ```$crud->unsetCloneFields(['address_1', 'address_2', 'credit_limit']);``` |  Unset (do not display) the specified fields from the clone form. |
 | unsetColumns | | |
-| unsetDelete | | |
-| unsetEdit | | |
+| unsetDelete | ```$crud->unsetDelete();```| Unset (and do not display) the delete functionality (also unsetting the delete multiple functionality) |
+| unsetEdit | ```$crud->unsetEdit();``` | Removing the edit operation for the end-user (from the frontend and the backend) |
 | unsetEditFields | | |
-| unsetExport | | |
+| unsetExport | ```$crud->unsetExport();``` | Removing the export functionality for the current CRUD. |
 | unsetFields | | |
-| unsetJquery | | |
-| unsetJqueryUi | | |
-| unsetOperations | | |
-| unsetPrint | | |
-| unsetRead | | |
+| unsetJquery | ```$crud->unsetJquery();``` | Do not load jQuery. This is used when jQuery is already loaded at the template. |
+| unsetJqueryUi | ```$crud->unsetJqueryUi();``` | Do not load jQuery UI. This is used when the jQuery UI (CSS and JS) is already loaded at the template. |
+| unsetOperations | ```$crud->unsetOperations();``` | Removing all the permissions for any operation (expect print and export) for the end-user. |
+| unsetPrint | ```$crud->unsetPrint();``` | The method unsetPrint is removing completely the Print operation for the end-user. |
+| unsetRead | ```$crud->unsetRead();``` | The method unsetRead is removing completely the Read operation for the end-user. |
 | unsetReadFields | | |
 | unsetTexteditor  | ```$crud->unsetTexteditor(['description', 'full_description']);``` |  Unsets the texteditor for the selected fields. This function is really rare to use as by default there is not any load of the texteditor for optimising purposes. |
 

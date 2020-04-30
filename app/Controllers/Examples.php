@@ -15,7 +15,22 @@ class Examples extends BaseController
 		return $this->_exampleOutput($output);
 	}
 
-    function offices_management () {
+	public function orders_management() {
+        $crud = new GroceryCrud();
+
+        $crud->setRelation('customerNumber','customers','{contactLastName} {contactFirstName}');
+        $crud->displayAs('customerNumber','Customer');
+        $crud->setTable('orders');
+        $crud->setSubject('Order');
+        $crud->unsetAdd();
+        $crud->unsetDelete();
+
+        $output = $crud->render();
+
+        return $this->_exampleOutput($output);
+    }
+
+    public function offices_management () {
         $crud = new GroceryCrud();
 
         $crud->setTheme('datatables');
