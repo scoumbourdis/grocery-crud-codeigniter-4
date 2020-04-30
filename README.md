@@ -42,9 +42,22 @@ Grocery CRUD community edition for Codeigniter 4
 | uniqueFields  | ```$crud->uniqueFields(['url', 'reference_id']);``` |  Check if the data for the specified fields are unique. This is used at the insert and the update operation. |
 | unsetAdd  | ```$crud->unsetAdd();``` |  Removing the insert functionality at the current CRUD. |
 | unsetAddFields  | ```$crud->unsetAddFields(['address_1', 'address_2', 'credit_limit']);``` |  Unset (do not display) the specified fields for the insert form. |
+| unsetBackToDatagrid  | ```$crud->unsetBackToDatagrid();``` |  Unsets everything that has to do with buttons or links with go back to datagrid message |
 | unsetBootstrap  | ```$crud->unsetBootstrap();``` |  Do not load Bootstrap CSS. This is used when the Bootstrap CSS is already loaded at the template. |
 | unsetClone  | ```$crud->unsetClone();``` |  The method unsetClone is removing completely the Clone operation for the end-user. |
 | unsetCloneFields  | ```$crud->unsetCloneFields(['address_1', 'address_2', 'credit_limit']);``` |  Unset (do not display) the specified fields from the clone form. |
+| unsetColumns | | |
+| unsetDelete | | |
+| unsetEdit | | |
+| unsetEditFields | | |
+| unsetExport | | |
+| unsetFields | | |
+| unsetJquery | | |
+| unsetJqueryUi | | |
+| unsetOperations | | |
+| unsetPrint | | |
+| unsetRead | | |
+| unsetReadFields | | |
 | unsetTexteditor  | ```$crud->unsetTexteditor(['description', 'full_description']);``` |  Unsets the texteditor for the selected fields. This function is really rare to use as by default there is not any load of the texteditor for optimising purposes. |
 
 ### Callback Functionality (Changing or enhancing the default behavior with callbacks)
@@ -121,7 +134,10 @@ to add multiple rules at once)
 could work only to a public folder and the uploader was not up to date and it was causing confusion to the developers 
 that just wanted to see it working and unfortunately they couldn't.
 * Removing the ability to use Grocery CRUD as preloaded library. For example `$this->grocery_crud->render();`. This was
- causing bugs and unwanted issues as the library most of the cases wasn't initialised correctly.  
+ causing bugs and unwanted issues as the library most of the cases wasn't initialised correctly. 
+* `unset_list` is now removed. Unsetting the initial grid causing issues with the redirections and the URLs to not be 
+able to change and this is causing a development and an end-user confusion. It is very possible that we will revisit 
+`unset_list` at the future (probably renamed as `unsetDatagrid`)
 
 ### Changing default configurations/values
 
@@ -129,5 +145,6 @@ that just wanted to see it working and unfortunately they couldn't.
 `$crud->setClone();` on your CRUD.
 * By default texteditor is disabled for performance purposes. In case you would like to enable texteditor you will 
 need to specify which fields with `$crud->setTexteditor`
+* `unsetOperations` (previously `unset_operations`) is not removing the print and the export ability
 
 For more information, visit http://www.grocerycrud.com

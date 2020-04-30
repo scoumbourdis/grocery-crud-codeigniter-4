@@ -3556,12 +3556,11 @@ class GroceryCrud extends grocery_CRUD_States
     }
 
     /**
-     * Unsets just the jquery library from the js. This function can be used if there is already a jquery included
-     * in the main template. This will avoid all jquery conflicts.
+     * 	Do not load jQuery. This is used when jQuery is already loaded at the template.
      *
-     * @return	void
+     * @return $this
      */
-    public function unset_jquery()
+    public function unsetJquery()
     {
         $this->unset_jquery = true;
 
@@ -3569,13 +3568,11 @@ class GroceryCrud extends grocery_CRUD_States
     }
 
     /**
-     * Unsets the jquery UI Javascript and CSS. This function is really useful
-     * when the jquery UI JavaScript and CSS are already included in the main template.
-     * This will avoid all jquery UI conflicts.
+     * Do not load jQuery UI. This is used when the jQuery UI (CSS and JS) is already loaded at the template.
      *
-     * @return	void
+     * @return $this
      */
-    public function unset_jquery_ui()
+    public function unsetJqueryUi()
     {
         $this->unset_jquery_ui = true;
 
@@ -3675,11 +3672,11 @@ class GroceryCrud extends grocery_CRUD_States
     }
 
     /**
-     * Unsets the edit operation from the list
+     * Removing the edit operation for the end-user (from the frontend and the backend)
      *
-     * @return	void
+     * @return $this
      */
-    public function unset_edit()
+    public function unsetEdit()
     {
         $this->unset_edit = true;
 
@@ -3687,11 +3684,11 @@ class GroceryCrud extends grocery_CRUD_States
     }
 
     /**
-     * Unsets the delete operation from the list
+     * Unset (and do not display) the delete functionality (also unsetting the delete multiple functionality)
      *
-     * @return	void
+     * @return $this
      */
-    public function unset_delete()
+    public function unsetDelete()
     {
         $this->unset_delete = true;
 
@@ -3699,11 +3696,11 @@ class GroceryCrud extends grocery_CRUD_States
     }
 
     /**
-     * Unsets the read operation from the list
+     * The method unsetRead is removing completely the Read operation for the end-user.
      *
-     * @return	void
+     * @return $this
      */
-    public function unset_read()
+    public function unsetRead()
     {
         $this->unset_read = true;
 
@@ -3721,24 +3718,23 @@ class GroceryCrud extends grocery_CRUD_States
     }
 
     /**
-     * Unsets the export button and functionality from the list
+     * Removing the export functionality for the current CRUD.
      *
-     * @return	void
+     * @return $this
      */
-    public function unset_export()
+    public function unsetExport()
     {
         $this->unset_export = true;
 
         return $this;
     }
 
-
     /**
-     * Unsets the print button and functionality from the list
+     * The method unsetPrint is removing completely the Print operation for the end-user.
      *
-     * @return	void
+     * @return $this
      */
-    public function unset_print()
+    public function unsetPrint()
     {
         $this->unset_print = true;
 
@@ -3746,62 +3742,47 @@ class GroceryCrud extends grocery_CRUD_States
     }
 
     /**
-     * Unsets all the operations from the list
+     * Removing all the permissions for any operation (expect print and export) for the end-user.
      *
-     * @return	void
+     * @return $this
      */
-    public function unset_operations()
+    public function unsetOperations()
     {
         $this->unset_add 	= true;
         $this->unset_edit 	= true;
         $this->unset_clone = true;
         $this->unset_delete = true;
         $this->unset_read	= true;
-        $this->unset_export = true;
-        $this->unset_print  = true;
 
         return $this;
     }
 
     /**
-     * Unsets a column from the list
+     * Unset (do not display) the specified columns.
      *
-     * @return	void.
+     * @param array $columns
+     * @return $this
      */
-    public function unset_columns()
+    public function unsetColumns(array $columns)
     {
-        $args = func_get_args();
-
-        if(isset($args[0]) && is_array($args[0]))
-        {
-            $args = $args[0];
-        }
-
-        $this->unset_columns = $args;
+        $this->unset_columns = $columns;
 
         return $this;
     }
 
-    public function unset_list()
+    /**
+     * Unset (do not display) the specified fields for insert, update, clone and view form.
+     * This method is simply combining the methods: unsetAddFields, unsetEditFields, unsetCloneFields, unsetReadFields.
+     *
+     * @param array $fields
+     * @return $this
+     */
+    public function unsetFields(array $fields)
     {
-        $this->unset_list = true;
-
-        return $this;
-    }
-
-    public function unset_fields()
-    {
-        $args = func_get_args();
-
-        if(isset($args[0]) && is_array($args[0]))
-        {
-            $args = $args[0];
-        }
-
-        $this->unset_add_fields = $args;
-        $this->unset_edit_fields = $args;
-        $this->unset_clone_fields = $args;
-        $this->unset_read_fields = $args;
+        $this->unset_add_fields = $fields;
+        $this->unset_edit_fields = $fields;
+        $this->unset_clone_fields = $fields;
+        $this->unset_read_fields = $fields;
 
         return $this;
     }
@@ -3819,16 +3800,16 @@ class GroceryCrud extends grocery_CRUD_States
         return $this;
     }
 
-    public function unset_edit_fields()
+
+    /**
+     * Unset (do not display) the specified fields for the update form.
+     *
+     * @param array $fields
+     * @return $this
+     */
+    public function unsetEditFields(array $fields)
     {
-        $args = func_get_args();
-
-        if(isset($args[0]) && is_array($args[0]))
-        {
-            $args = $args[0];
-        }
-
-        $this->unset_edit_fields = $args;
+        $this->unset_edit_fields = $fields;
 
         return $this;
     }
@@ -3846,27 +3827,26 @@ class GroceryCrud extends grocery_CRUD_States
         return $this;
     }
 
-    public function unset_read_fields()
+
+    /**
+     * Unset (do not display) the specified fields for the view (read only) form.
+     *
+     * @param array $fields
+     * @return $this
+     */
+    public function unsetReadFields(array $fields)
     {
-        $args = func_get_args();
-
-        if(isset($args[0]) && is_array($args[0]))
-        {
-            $args = $args[0];
-        }
-
-        $this->unset_read_fields = $args;
+        $this->unset_read_fields = $fields;
 
         return $this;
     }
 
-
     /**
-     * Unsets everything that has to do with buttons or links with go back to list message
-     * @access	public
-     * @return	void
+     * Unsets everything that has to do with buttons or links with go back to datagrid message
+     *
+     * @return $this
      */
-    public function unset_back_to_list()
+    public function unsetBackToDatagrid()
     {
         $this->unset_back_to_list = true;
 
