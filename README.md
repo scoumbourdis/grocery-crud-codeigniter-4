@@ -84,6 +84,18 @@ Grocery CRUD community edition for Codeigniter 4
 
 ### Callback Functionality (Changing or enhancing the default behavior with callbacks)
 
+### Examples
+
+#### setActionButton
+
+    $crud->setActionButton('User Avatar', 'el el-user', function ($primaryKey) { 
+        return site_url('/view_avatar/' . $primaryKey); 
+    }, true);
+    
+
+
+
+
 ## Languages Support
 
 So far Grocery CRUD is translated into 36 languages:
@@ -148,8 +160,60 @@ If you are migrating from version 1 to 2 you will need to consider the below mig
 * `add_fields` is now renamed to `addFields` and it only gets an array as an argument 
 * `clone_fields` is now renamed to `cloneFields` and it only gets an array as an argument 
 * `columns` now only gets an array as an argument
-* `set_rules` is now renamed to `setRule` and it is supporting only one rule at the time (currently there is no ability 
-to add multiple rules at once)
+* `order_by` is now renamed to `defaultOrdering`
+* `set_rules` is now renamed to `setRule` and it is supporting only one rule at the time. 
+Currently, there is no ability to add multiple rules at once
+* `default_ordering` is now renamed to `defaultOrdering`
+* `display_as` is now renamed to `displayAs`
+* `edit_fields` is now renamed to `editFields` and it only gets an array as an argument
+* `field_type` is now renamed to `fieldType`
+* `fields` is now renamed to `fields` and it only gets an array as an argument
+* `read_fields` is now renamed to `readFields` and it only gets an array as an argument
+* `required_fields` is now renamed to `requiredFields` and it only gets an array as an argument
+* `set_action_button` is now renamed to `setActionButton` and almost all the parameters has changed. You can see an example at the section [setActionButton](#setactionbutton)
+* `set_crud_url_path` is now renamed to `setApiUrlPath`
+* `set_clone` is now renamed to `setClone`
+* `set_lang_string` is now renamed to `setLangString`
+* `set_language` is now renamed to `setLanguage`
+* `set_model` is now renamed to `setModel` and it gets the model as an object parameter and not as a string
+* `set_primary_key` is now renamed to `setPrimaryKey`
+* `set_relation` is now renamed to `setRelation`
+* `set_relation_n_n` is now renamed to `setRelationNtoN` and we've removed the ability to add a priority field as this 
+was a very old outdated jquery plugin that was causing many issues (especially with newer versions of jQuery). We want
+to revisit this section at the future
+* `set_subject` is now renamed to `setSubject`
+* `set_table` is now renamed to `setTable`
+* `set_theme` is now renamed to `setTheme`
+* `unique_fields` is now renamed to `uniqueFields` and it only gets an array as an argument
+* `unset_add` is now renamed to `unsetAdd`
+* `unset_add_fields` is now renamed to `unsetAddFields` and it only gets an array as an argument
+* `unset_back_to_list` is now renamed to `unsetBackToDatagrid`
+* `unset_bootstrap` is now renamed to `unsetBootstrap`
+* `unset_clone` is now renamed to `unsetClone`
+* `unset_clone_fields` is now renamed to `unsetCloneFields` and it only gets an array as an argument
+* `unset_columns` is now renamed to `unsetColumns` and it only gets an array as an argument
+* `unset_delete` is now renamed to `unsetDelete`
+* `unset_edit` is now renamed to `unsetEdit`
+* `unset_edit_fields` is now renamed to `unsetEditFields` and it only gets an array as an argument
+* `unset_export` is now renamed to `unsetExport`
+* `unset_fields` is now renamed to `unsetFields` and it only gets an array as an argument
+* `unset_jquery` is now renamed to `unsetJquery`
+* `unset_jquery_ui` is now renamed to `unsetJqueryUi`
+* `unset_operations` is now renamed to `unsetOperations`
+* `unset_print` is now renamed to `unsetPrint`
+* `unset_read` is now renamed to `unsetRead`
+* `unset_read_fields` is now renamed to `unsetReadFields` and it only gets an array as an argument
+* `unset_texteditor` is now renamed to `unsetTexteditor` and it only gets an array as an argument
+
+### New functions
+
+* `setAdd`
+* `setEdit`
+* `setRead`
+* `setDelete`
+* `setExport`
+* `setPrint`
+* `setTexteditor`
 
 ### Removed features/functions
 * `set_field_upload` is now removed. The upload functionality was a feature that was causing security issues as it 
