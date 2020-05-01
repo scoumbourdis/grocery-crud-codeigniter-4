@@ -67,18 +67,18 @@ Grocery CRUD community edition for Codeigniter 4
 | unsetBootstrap  | ```$crud->unsetBootstrap();``` |  Do not load Bootstrap CSS. This is used when the Bootstrap CSS is already loaded at the template. |
 | unsetClone  | ```$crud->unsetClone();``` |  The method unsetClone is removing completely the Clone operation for the end-user. |
 | unsetCloneFields  | ```$crud->unsetCloneFields(['address_1', 'address_2', 'credit_limit']);``` |  Unset (do not display) the specified fields from the clone form. |
-| unsetColumns | | |
+| unsetColumns | ```$crud->unsetColumns(['address_1', 'address_2', 'credit_limit']);``` | Unset (do not display) the specified columns. |
 | unsetDelete | ```$crud->unsetDelete();```| Unset (and do not display) the delete functionality (also unsetting the delete multiple functionality) |
 | unsetEdit | ```$crud->unsetEdit();``` | Removing the edit operation for the end-user (from the frontend and the backend) |
-| unsetEditFields | | |
+| unsetEditFields | ```$crud->unsetEditFields(['address_1', 'address_2', 'credit_limit']);``` | Unset (do not display) the specified fields for the update form. |
 | unsetExport | ```$crud->unsetExport();``` | Removing the export functionality for the current CRUD. |
-| unsetFields | | |
+| unsetFields | ```$crud->unsetFields(['address_1', 'address_2', 'credit_limit']);``` | Unset (do not display) the specified fields for insert, update, clone and view form. This method is simply combining the methods: unsetAddFields, unsetEditFields, unsetCloneFields, unsetReadFields. |
 | unsetJquery | ```$crud->unsetJquery();``` | Do not load jQuery. This is used when jQuery is already loaded at the template. |
 | unsetJqueryUi | ```$crud->unsetJqueryUi();``` | Do not load jQuery UI. This is used when the jQuery UI (CSS and JS) is already loaded at the template. |
 | unsetOperations | ```$crud->unsetOperations();``` | Removing all the permissions for any operation (expect print and export) for the end-user. |
 | unsetPrint | ```$crud->unsetPrint();``` | The method unsetPrint is removing completely the Print operation for the end-user. |
 | unsetRead | ```$crud->unsetRead();``` | The method unsetRead is removing completely the Read operation for the end-user. |
-| unsetReadFields | | |
+| unsetReadFields | ```$crud->unsetReadFields(['address_1', 'address_2', 'credit_limit']);``` | Unset (do not display) the specified fields for the view (read only) form. |
 | unsetTexteditor  | ```$crud->unsetTexteditor(['description', 'full_description']);``` |  Unsets the texteditor for the selected fields. This function is really rare to use as by default there is not any load of the texteditor for optimising purposes. |
 | where  | ```$crud->like('country', 'USA');``` | Filter the queries with an extra where statement. |
 
