@@ -1,6 +1,5 @@
 Grocery CRUD community edition for Codeigniter 4
 =============
-⚠️ Warning: Work in progress! This repository is not in a working stage just yet!
 
 ## Usage example
 
