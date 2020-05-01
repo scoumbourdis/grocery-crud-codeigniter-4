@@ -37,6 +37,7 @@ Grocery CRUD community edition for Codeigniter 4
 | fields  | ```$crud->fields(['first_name', 'last_name', 'address']);``` | This function is really just a facade function to call all the 4 functions at once: addFields, editFields, readFields and cloneFields.  |
 | getState  | ```$crud->getState();``` | Simply get the current state name as a string.  |
 | getStateInfo  | ```$crud->getStateInfo();``` | Get all the information about the current state.  |
+| like  | ```$crud->like('contact_last_name', 'Tse');``` | Filter the queries with a extra where LIKE statement. |
 | readFields  | ```$crud->readFields(['first_name', 'last_name', 'fullname', 'address']);``` | The fields that will be visible when the end-user navigates to the view form.  |
 | render  | ```$output = $crud->render();``` | This is the most basic function. In other words this means “make it work”.  |
 | requiredFields  | ```$crud->requiredFields(['first_name', 'last_name']);``` | The most common validation. Checks is the field provided by the user is empty.  |
@@ -80,6 +81,7 @@ Grocery CRUD community edition for Codeigniter 4
 | unsetRead | ```$crud->unsetRead();``` | The method unsetRead is removing completely the Read operation for the end-user. |
 | unsetReadFields | | |
 | unsetTexteditor  | ```$crud->unsetTexteditor(['description', 'full_description']);``` |  Unsets the texteditor for the selected fields. This function is really rare to use as by default there is not any load of the texteditor for optimising purposes. |
+| where  | ```$crud->like('country', 'USA');``` | Filter the queries with an extra where statement. |
 
 ### Callback Functionality (Changing or enhancing the default behavior with callbacks)
 

@@ -4347,51 +4347,30 @@ class GroceryCrud extends grocery_CRUD_States
         return $this;
     }
 
-    public function where($key, $value = NULL, $escape = TRUE)
+    /**
+     * Filter datagrid with an extra where statement.
+     *
+     * @param string $field
+     * @param string|null $value
+     * @param bool $escape
+     * @return $this
+     */
+    public function where(string $field, $value = null, $escape = true)
     {
-        $this->where[] = array($key,$value,$escape);
+        $this->where[] = array($field, $value, $escape);
 
         return $this;
     }
 
-    public function or_where($key, $value = NULL, $escape = TRUE)
-    {
-        $this->or_where[] = array($key,$value,$escape);
-
-        return $this;
-    }
-
-    public function like($field, $match = '', $side = 'both')
+    /**
+     * @param string $field
+     * @param string $match
+     * @param string $side
+     * @return $this
+     */
+    public function like(string $field, $match = '', $side = 'both')
     {
         $this->like[] = array($field, $match, $side);
-
-        return $this;
-    }
-
-    protected function having($key, $value = '', $escape = TRUE)
-    {
-        $this->having[] = array($key, $value, $escape);
-
-        return $this;
-    }
-
-    protected function or_having($key, $value = '', $escape = TRUE)
-    {
-        $this->or_having[] = array($key, $value, $escape);
-
-        return $this;
-    }
-
-    public function or_like($field, $match = '', $side = 'both')
-    {
-        $this->or_like[] = array($field, $match, $side);
-
-        return $this;
-    }
-
-    public function limit($limit, $offset = '')
-    {
-        $this->limit = array($limit,$offset);
 
         return $this;
     }
