@@ -216,6 +216,9 @@ to revisit this section at the future
 * `setTexteditor`
 
 ### Removed features/functions
+* `callback_field` is now removed. We are still having separate functions: `callbackAddField`, `callbackEditField`, 
+`callbackCloneField`, `callbackReadField` but having one to trigger all of them was causing issues as every operation 
+ usually needed different implementation.
 * `set_field_upload` is now removed. The upload functionality was a feature that was causing security issues as it 
 could work only to a public folder and the uploader was not up to date and it was causing confusion to the developers 
 that just wanted to see it working and unfortunately they couldn't.

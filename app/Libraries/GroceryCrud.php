@@ -216,8 +216,6 @@ class grocery_CRUD_Field_Types
             'relation',
             'relation_readonly',
             'relation_n_n',
-            'upload_file',
-            'upload_file_readonly',
             'hidden',
             'password',
             'readonly',
@@ -311,38 +309,6 @@ class grocery_CRUD_Field_Types
 
             case 'dropdown':
                 $value = array_key_exists($value,$field_info->extras) ? $field_info->extras[$value] : $value;
-                break;
-
-            case 'upload_file':
-                if(empty($value))
-                {
-                    $value = "";
-                }
-                else
-                {
-                    $is_image = !empty($value) &&
-                    ( substr($value,-4) == '.jpg'
-                        || substr($value,-4) == '.png'
-                        || substr($value,-5) == '.jpeg'
-                        || substr($value,-4) == '.gif'
-                        || substr($value,-5) == '.tiff')
-                        ? true : false;
-
-                    $file_url = base_url().$field_info->extras->upload_path."/$value";
-
-                    $file_url_anchor = '<a href="'.$file_url.'"';
-                    if($is_image)
-                    {
-                        $file_url_anchor .= ' class="image-thumbnail"><img src="'.$file_url.'" height="50px">';
-                    }
-                    else
-                    {
-                        $file_url_anchor .= ' target="_blank">'.$this->character_limiter($value,$this->character_limiter,'...',true);
-                    }
-                    $file_url_anchor .= '</a>';
-
-                    $value = $file_url_anchor;
-                }
                 break;
 
             default:
@@ -1403,13 +1369,6 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
         $this->basic_model->setBuilder($this->basic_db_table);
         $values = $this->basic_model->get_edit_values($primary_key_value);
 
-        $types 	= $this->get_field_types();
-        foreach ($values as $fieldName => $fieldType) {
-            if ($types[$fieldName . '']->crud_type == 'upload_file') {
-                $values->$fieldName = '';
-            }
-        }
-
         if(!empty($this->relation_n_n)) {
             foreach($this->relation_n_n as $field_name => $field_info) {
                 $values->$field_name = $this->get_relation_n_n_selection_array($primary_key_value, $field_info);
@@ -1801,7 +1760,7 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
         $data->update_url	= $this->getInsertUrl();
         $data->delete_url	= $this->getDeleteUrl($state_info);
         $data->read_url		= $this->getReadUrl($state_info->primary_key);
-        $data->input_fields = $this->get_edit_input_fields($data->field_values);
+        $data->input_fields = $this->get_clone_input_fields($data->field_values);
         $data->unique_hash			= $this->get_method_hash();
 
         $data->fields 		= $this->get_clone_fields();
@@ -1973,46 +1932,6 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
     {
         @ob_end_clean();
         echo json_encode($validation_result);
-        $this->set_echo_and_die();
-    }
-
-    protected function upload_layout($upload_result, $field_name)
-    {
-        @ob_end_clean();
-        if($upload_result !== false && !is_string($upload_result) && empty($upload_result[0]->error))
-        {
-            echo json_encode(
-                (object)array(
-                    'success' => true,
-                    'files'	=> $upload_result
-                ));
-        }
-        else
-        {
-            $result = (object)array('success' => false);
-            if(is_string($upload_result))
-                $result->message = $upload_result;
-            if(!empty($upload_result[0]->error))
-                $result->message = $upload_result[0]->error;
-
-            echo json_encode($result);
-        }
-
-        $this->set_echo_and_die();
-    }
-
-    protected function delete_file_layout($upload_result)
-    {
-        @ob_end_clean();
-        if($upload_result !== false)
-        {
-            echo json_encode( (object)array( 'success' => true ) );
-        }
-        else
-        {
-            echo json_encode((object)array('success' => false));
-        }
-
         $this->set_echo_and_die();
     }
 
@@ -2664,6 +2583,51 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 
         return $input_fields;
     }
+
+    protected function get_clone_input_fields($field_values = null)
+    {
+        $fields = $this->get_clone_fields();
+        $types 	= $this->get_field_types();
+
+        $input_fields = array();
+
+        foreach($fields as $field_num => $field)
+        {
+            $field_info = $types[$field->field_name];
+
+            $field_value = !empty($field_values) && isset($field_values->{$field->field_name}) ? $field_values->{$field->field_name} : null;
+            if(!isset($this->callback_clone_field[$field->field_name]))
+            {
+                $field_input = $this->get_field_input($field_info, $field_value);
+            }
+            else
+            {
+                $primary_key = $this->getStateInfo()->primary_key;
+                $field_input = $field_info;
+                $field_input->input = call_user_func($this->callback_clone_field[$field->field_name], $field_value, $primary_key, $field_info, $field_values);
+            }
+
+            switch ($field_info->crud_type) {
+                case 'invisible':
+                    unset($this->clone_fields[$field_num]);
+                    unset($fields[$field_num]);
+                    break;
+                case 'hidden':
+                    $this->edit_hidden_fields[] = $field_input;
+                    unset($this->clone_fields[$field_num]);
+                    unset($fields[$field_num]);
+                    break;
+                default:
+                    $input_fields[$field->field_name] = $field_input;
+                    break;
+            }
+
+
+        }
+
+        return $input_fields;
+    }
+
 
     protected function get_read_input_fields($field_values = null)
     {
@@ -4730,10 +4694,12 @@ class GroceryCrud extends grocery_CRUD_States
     }
 
     /**
+     * The callback is used in cases we need to add or change data before the insert functionality.
      *
-     * Enter description here ...
+     * @param callable $callback
+     * @return $this
      */
-    public function callback_before_insert($callback = null)
+    public function callbackBeforeInsert(callable $callback)
     {
         $this->callback_before_insert = $callback;
 
@@ -4741,10 +4707,12 @@ class GroceryCrud extends grocery_CRUD_States
     }
 
     /**
+     * The callback that will be used right after the insert of the data.
      *
-     * Enter description here ...
+     * @param callable $callback
+     * @return $this
      */
-    public function callback_after_insert($callback = null)
+    public function callbackAfterInsert(callable $callback)
     {
         $this->callback_after_insert = $callback;
 
@@ -4752,22 +4720,25 @@ class GroceryCrud extends grocery_CRUD_States
     }
 
     /**
+     * The callback is used when we need to replace the default functionality of the insert.
      *
-     * Enter description here ...
+     * @param callable $callback
+     * @return $this
      */
-    public function callback_insert($callback = null)
+    public function callbackInsert(callable $callback)
     {
         $this->callback_insert = $callback;
 
         return $this;
     }
 
-
     /**
+     * The callback is used in cases we need to add or change data before the update functionality.
      *
-     * Enter description here ...
+     * @param callable $callback
+     * @return $this
      */
-    public function callback_before_update($callback = null)
+    public function callbackBeforeUpdate(callable $callback)
     {
         $this->callback_before_update = $callback;
 
@@ -4775,23 +4746,25 @@ class GroceryCrud extends grocery_CRUD_States
     }
 
     /**
+     * The callback that will be used right after the update of the data.
      *
-     * Enter description here ...
+     * @param callable $callback
+     * @return $this
      */
-    public function callback_after_update($callback = null)
+    public function callbackAfterUpdate(callable $callback)
     {
         $this->callback_after_update = $callback;
 
         return $this;
     }
 
-
     /**
+     * The callback is used when we need to replace the default update functionality.
      *
-     * Enter description here ...
-     * @param mixed $callback
+     * @param callable $callback
+     * @return $this
      */
-    public function callback_update($callback = null)
+    public function callbackUpdate(callable $callback)
     {
         $this->callback_update = $callback;
 
@@ -4799,10 +4772,12 @@ class GroceryCrud extends grocery_CRUD_States
     }
 
     /**
+     * The callback will be triggered before the delete functionality.
      *
-     * Enter description here ...
+     * @param callable $callback
+     * @return $this
      */
-    public function callback_before_delete($callback = null)
+    public function callbackBeforeDelete(callable $callback)
     {
         $this->callback_before_delete = $callback;
 
@@ -4810,10 +4785,12 @@ class GroceryCrud extends grocery_CRUD_States
     }
 
     /**
+     * The callback that will be used right after the delete.
      *
-     * Enter description here ...
+     * @param callable $callback
+     * @return $this
      */
-    public function callback_after_delete($callback = null)
+    public function callbackAfterDelete(callable $callback)
     {
         $this->callback_after_delete = $callback;
 
@@ -4821,10 +4798,12 @@ class GroceryCrud extends grocery_CRUD_States
     }
 
     /**
+     * The basic usage of callbackDelete is when we want to replace the default delete functionality.
      *
-     * Enter description here ...
+     * @param callable $callback
+     * @return $this
      */
-    public function callback_delete($callback = null)
+    public function callbackDelete(callable $callback)
     {
         $this->callback_delete = $callback;
 
@@ -4864,15 +4843,14 @@ class GroceryCrud extends grocery_CRUD_States
         return $this;
     }
 
-
-
     /**
+     * The method callbackColumn is the transformation of the data for a column at the datagrid.
      *
-     * Enter description here ...
      * @param string $column
-     * @param mixed $callback
+     * @param callable|null $callback
+     * @return $this
      */
-    public function callback_column($column ,$callback = null)
+    public function callbackColumn(string $column , callable $callback = null)
     {
         $this->callback_column[$column] = $callback;
 
@@ -4880,52 +4858,55 @@ class GroceryCrud extends grocery_CRUD_States
     }
 
     /**
+     * A callback that is used in case you need to create a custom field for the add form
      *
-     * Enter description here ...
      * @param string $field
-     * @param mixed $callback
-     */
-    public function callback_field($field, $callback = null)
-    {
-        $this->callback_add_field[$field] = $callback;
-        $this->callback_edit_field[$field] = $callback;
-        $this->callback_read_field[$field] = $callback;
-
-        return $this;
-    }
-
-    /**
-     *
-     * Enter description here ...
-     * @param string $field
-     * @param mixed $callback
-     */
-    public function callback_add_field($field, $callback = null)
-    {
-        $this->callback_add_field[$field] = $callback;
-
-        return $this;
-    }
-
-    /**
-     *
-     * Enter description here ...
-     * @param string $field
-     * @param mixed $callback
-     */
-    public function callback_edit_field($field, $callback = null)
-    {
-        $this->callback_edit_field[$field] = $callback;
-
-        return $this;
-    }
-
-    /**
-     * @param $field
-     * @param mixed|callable|null $callback
+     * @param callable $callback
      * @return $this
      */
-    public function callback_read_field($field, $callback = null)
+    public function callbackAddField(string $field, callable $callback)
+    {
+        $this->callback_add_field[$field] = $callback;
+
+        return $this;
+    }
+
+    /**
+     * A callback that is used in case you need to create a custom field for the edit/update form
+     *
+     * @param string $field
+     * @param callable $callback
+     * @return $this
+     */
+    public function callbackEditField(string $field, callable $callback)
+    {
+        $this->callback_edit_field[$field] = $callback;
+
+        return $this;
+    }
+
+    /**
+     * A callback that is used in case you need to create a custom field for the clone form
+     *
+     * @param string $field
+     * @param callable $callback
+     * @return $this
+     */
+    public function callbackCloneField(string $field, callable $callback)
+    {
+        $this->callback_clone_field[$field] = $callback;
+
+        return $this;
+    }
+
+    /**
+     * This is a callback in order to create a custom field at the read/view form
+     *
+     * @param string $field
+     * @param callable $callback
+     * @return $this
+     */
+    public function callbackReadField(string $field, callable $callback)
     {
         $this->callback_read_field[$field] = $callback;
 
