@@ -98,7 +98,7 @@ Grocery CRUD community edition for Codeigniter 4
 
 ## Languages Support
 
-So far Grocery CRUD is translated into 36 languages:
+So far Grocery CRUD has been translated into 36 languages:
 
 - Afrikaans
 - Arabic
