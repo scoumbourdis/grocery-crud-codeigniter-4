@@ -40,7 +40,7 @@ Grocery CRUD community edition for Codeigniter 4
 | readFields  | ```$crud->readFields(['first_name', 'last_name', 'fullname', 'address']);``` | The fields that will be visible when the end-user navigates to the view form.  |
 | render  | ```$output = $crud->render();``` | This is the most basic function. In other words this means “make it work”.  |
 | requiredFields  | ```$crud->requiredFields(['first_name', 'last_name']);``` | The most common validation. Checks is the field provided by the user is empty.  |
-| setActionButton  | ```$crud->setActionButton('User Avatar', 'el el-user', function ($primaryKey) { return site_url('/view_avatar/' . $primaryKey); }, true);``` | Adding extra action buttons to the rows of the datagrid.  |
+| setActionButton  | [Example](#setactionbutton) | Adding extra action buttons to the rows of the datagrid.  |
 | setAdd  | ```$crud->setAdd();``` | Setting the insert functionality. This function is rare to use as the default is already enabled.  |
 | setApiUrlPath  | ```$crud->setApiUrlPath(site_url('/example/index'), site_url('/'));``` | Change the default API URL path and instead use the provided URL. Useful when we use Routes. |
 | setClone  | ```$crud->setClone();``` | Enabling the clone functionality for the datagrid. Clone is basically copying all the data to an insert form. |
@@ -84,16 +84,58 @@ Grocery CRUD community edition for Codeigniter 4
 
 ### Callback Functionality (Changing or enhancing the default behavior with callbacks)
 
-### Examples
+| Function name  | Example | Small description |
+| ------------- | ------------- | ------------- |
+| callbackAddField  | [Example](#callbackaddfield) |  A callback that is used in case you need to create a custom field for the add form. |
+| callbackAfterDelete  | [Example](#callbackafterdelete) |  The callback that will be used right after the delete. |
+| callbackAfterInsert  | [Example](#callbackafterinsert) | The callback that will be used right after the insert of the data. |
+| callbackAfterUpdate  | [Example](#callbackafterupdate) |  The callback that will be used right after the update of the data. |
+| callbackBeforeDelete  | [Example](#callbackbeforedelete) |  The callback will be triggered before the delete functionality. |
+| callbackBeforeInsert  | [Example](#callbackbeforeinsert) |  The callback is used in cases we need to add or change data before the insert functionality. |
+| callbackBeforeUpdate  | [Example](#callbackbeforeupdate) | The callback is used in cases we need to add or change data before the update functionality. |
+| callbackCloneField  | [Example](#callbackclonefield) | A callback that is used in case you need to create a custom field for the clone form. |
+| callbackColumn  | [Example](#callbackcolumn) | The method callbackColumn is the transformation of the data for a column at the datagrid. |
+| callbackDelete  | [Example](#callbackdelete) | The basic usage of callbackDelete is when we want to replace the default delete functionality. |
+| callbackEditField  | [Example](#callbackeditfield) | A callback that is used in case you need to create a custom field for the edit/update form. |
+| callbackInsert  | [Example](#callbackinsert) | The callback is used when we need to replace the default functionality of the insert. |
+| callbackReadField  | [Example](#callbackreadfield) | This is a callback in order to create a custom field at the read/view form. |
+| callbackUpdate  | [Example](#callbackupdate) | The callback is used when we need to replace the default update functionality. |
+
+## Examples 
 
 #### setActionButton
 
     $crud->setActionButton('User Avatar', 'el el-user', function ($primaryKey) { 
         return site_url('/view_avatar/' . $primaryKey); 
     }, true);
-    
 
+### callbackAddField
 
+### callbackAfterDelete
+
+### callbackAfterInsert
+
+### callbackAfterUpdate
+
+### callbackBeforeDelete
+
+### callbackBeforeInsert
+
+### callbackBeforeUpdate
+
+### callbackCloneField
+
+### callbackColumn
+
+### callbackDelete
+
+### callbackEditField
+
+### callbackInsert
+
+### callbackReadField
+
+### callbackUpdate
 
 
 ## Languages Support
