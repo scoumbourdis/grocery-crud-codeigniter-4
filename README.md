@@ -111,7 +111,27 @@ Grocery CRUD community edition for Codeigniter 4
 
 ### callbackAddField
 
+Simple example:
+
+    $crud->callbackAddField('contact_telephone_number', function () {
+        return '<input class="form-control" name="contact_telephone_number" id="something-unique" />';
+    });
+
+Example with the `use` keyword: 
+    
+    $username = 'john';
+    $userId = '123';
+    $crud->callbackAddField('contact_telephone_number', function () use ($username, $userId) {
+        // You have access now at the extra custom variable $username and $userId
+        return '+30 <input name="contact_telephone_number"  /> for: ' . $username . '(id: ' . $userId . ')' ;
+    });
+
 ### callbackAfterDelete
+
+	$crud->callbackAfterDelete(function ($primaryKeyValue) {
+       
+	});
+
 
 ### callbackAfterInsert
 
