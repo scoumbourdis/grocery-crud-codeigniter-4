@@ -988,18 +988,26 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
                 }
             }else
             {
-                $callback_return = call_user_func($this->callback_insert, $post_data);
+                $stateParameters = (object)[
+                    'data' => $post_data
+                ];
+                $callback_return = call_user_func($this->callback_insert, $stateParameters);
 
-                if($callback_return === false)
-                {
+                $insert_primary_key = property_exists($stateParameters, 'insertId')
+                    ? $stateParameters->insertId : null;
+
+                if($callback_return === false) {
                     return false;
                 }
+
+                return $insert_primary_key;
             }
 
-            if(isset($insert_primary_key))
+            if(isset($insert_primary_key)) {
                 return $insert_primary_key;
-            else
-                return true;
+            }
+
+            return true;
         }
 
         return false;

@@ -179,7 +179,7 @@ Example with the `use` keyword:
          * ]
          */
         
-        // Your code here
+        // Your code goes here
        
         return $stateParameters;
     });
@@ -213,6 +213,28 @@ where the function customersSoftDelete at our model is the below:
 ### callbackEditField
 
 ### callbackInsert
+
+    $crud->callbackInsert(function ($stateParameters) {
+        /* $stateParameters will be an object with the below structure:
+         * (object)[
+         *      'data' => [ 
+         *            // Your inserted data
+         *            'customer_fist_name' => 'John',
+         *            'customer_last_name' => 'Smith',
+         *            ... 
+         *       ]
+         *
+         * ]
+         */
+    
+        // Your code goes here. Have in mind that you are replacing the default insert functionality so your
+        // code will need to include some insert methods
+    
+        // If you would like to return the inserted Id you should add it to the object like this
+        $stateParameters->insertId = '1234';
+    
+        return $stateParameters;
+    });
 
 ### callbackReadField
 
