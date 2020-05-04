@@ -1042,14 +1042,15 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
             {
                 if($this->callback_before_update !== null)
                 {
-                    $callback_return = call_user_func($this->callback_before_update, $post_data, $primary_key);
+                    $stateParameters = (object)[
+                        'primaryKeyValue' => $primary_key,
+                        'data' => $post_data
+                    ];
+                    $callbackReturn = call_user_func($this->callback_before_update, $stateParameters);
 
-                    if(!empty($callback_return) && is_array($callback_return))
-                    {
-                        $post_data = $callback_return;
-                    }
-                    elseif($callback_return === false)
-                    {
+                    if(!empty($callbackReturn) && is_object($callbackReturn)) {
+                        $post_data = $callbackReturn->data;
+                    } elseif($callbackReturn === false) {
                         return false;
                     }
 
@@ -1121,9 +1122,9 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
 
                 if($this->callback_after_update !== null)
                 {
-                    $callback_return = call_user_func($this->callback_after_update, $post_data, $primary_key);
+                    $callbackReturn = call_user_func($this->callback_after_update, $post_data, $primary_key);
 
-                    if($callback_return === false)
+                    if($callbackReturn === false)
                     {
                         return false;
                     }
@@ -1132,9 +1133,9 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
             }
             else
             {
-                $callback_return = call_user_func($this->callback_update, $post_data, $primary_key);
+                $callbackReturn = call_user_func($this->callback_update, $post_data, $primary_key);
 
-                if($callback_return === false)
+                if($callbackReturn === false)
                 {
                     return false;
                 }

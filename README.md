@@ -225,6 +225,32 @@ Example with the `use` keyword:
 
 ### callbackBeforeUpdate
 
+    $crud->callbackBeforeUpdate(function ($stateParameters) {
+        /* $stateParameters will be an object with the below structure:
+         * (object)[
+         *      'data' => [ 
+         *            // Your posted data
+         *            'customer_fist_name' => 'John',
+         *            'customer_last_name' => 'Smith',
+         *            ... 
+         *      ],
+         *      'primaryKeyValue' => '1234',
+         * ]
+         */
+    
+        // Your custom code goes here. 
+        // returning false (e.g. return false;) will stop the form to continue 
+        // and hence we will not update any data. This callback can also be 
+        // used as an extra validation check
+                
+        // Example that we can't update a rejected entry if the message is empty                
+        if ($stateParameters->data['status'] === 'Rejected' && $stateParameters->data['message'] === '') {
+              return false;
+        }
+                
+        return $stateParameters;
+    });
+
 ### callbackCloneField
 
 ### callbackColumn
