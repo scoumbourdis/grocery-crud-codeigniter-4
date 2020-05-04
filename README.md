@@ -152,17 +152,76 @@ Example with the `use` keyword:
     });
     
 ⚠️ Warning: Please have in mind that the callbackAfterDelete is called right after the delete operation. This means that:
- 1. The record that you are looking for with the primary key will not exist if you have a query within the callback
- 2. If you would like to have a soft delete or not a delete at all then consider also using [callbackDelete](#callbackdelete) as well
+ 1. The record/row that you are looking for with the primary key will not exist if you have a query within the callback
+ 2. If you would like to have a soft delete then consider using [callbackDelete](#callbackdelete) instead
 
 
 ### callbackAfterInsert
+
+    $crud->callbackAfterInsert(function ($stateParameters) {
+        /* $stateParameters will be an object with the below structure:
+         * (object)[
+         *      'data' => [ 
+         *            // Your inserted data
+         *            'customer_fist_name' => 'John',
+         *            'customer_last_name' => 'Smith',
+         *            ... 
+         *       ],
+         *      'insertId' => '123456'
+         * ]
+         */
+    
+        // Your custom code goes here. 
+                
+        return $stateParameters;
+    });
 
 ### callbackAfterUpdate
 
 ### callbackBeforeDelete
 
+        $crud->callbackBeforeDelete(function ($stateParameters) use ($userId) {
+            /* $stateParameters will be an object with the below structure:
+             * (object)[
+             *      'primaryKeyValue' => '1234'
+             * ]
+             */
+             
+             $model = new DemoExampleModel();
+             
+             if (!$model->userCanRemoveCustomerWithId($userId, $stateParameters->primaryKeyValue)) {
+                return false;
+             }
+
+            return $stateParameters;
+        });
+
 ### callbackBeforeInsert
+
+    $crud->callbackBeforeInsert(function ($stateParameters) {
+        /* $stateParameters will be an object with the below structure:
+         * (object)[
+         *      'data' => [ 
+         *            // Your inserted data
+         *            'customer_fist_name' => 'John',
+         *            'customer_last_name' => 'Smith',
+         *            ... 
+         *       ]
+         * ]
+         */
+    
+        // Your custom code goes here. 
+        // returning false (e.g. return false;) will stop the form to continue 
+        // and hence we will not insert any data. This callback can also be 
+        // used as an extra validation check
+                
+        // Example that we can't insert a rejected entry if the message is empty                
+        if ($stateParameters->data['status'] === 'Rejected' && $stateParameters->data['message'] === '') {
+              return false;
+        }
+                
+        return $stateParameters;
+    });
 
 ### callbackBeforeUpdate
 

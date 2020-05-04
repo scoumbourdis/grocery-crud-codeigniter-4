@@ -905,12 +905,16 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
             {
                 if($this->callback_before_insert !== null)
                 {
-                    $callback_return = call_user_func($this->callback_before_insert, $post_data);
+                    $stateParameters = (object)[
+                        'data' => $post_data
+                    ];
+                    $callback_return = call_user_func($this->callback_before_insert, $stateParameters);
 
-                    if(!empty($callback_return) && is_array($callback_return))
-                        $post_data = $callback_return;
-                    elseif($callback_return === false)
+                    if(!empty($callback_return) && is_object($callback_return)) {
+                        $post_data = $stateParameters->data;
+                    } elseif($callback_return === false) {
                         return false;
+                    }
                 }
 
                 $insert_data = array();
@@ -978,7 +982,12 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
 
                 if($this->callback_after_insert !== null)
                 {
-                    $callback_return = call_user_func($this->callback_after_insert, $post_data, $insert_primary_key);
+                    $stateParameters = (object)[
+                        'data' => $post_data,
+                        'insertId' => $insert_primary_key
+                    ];
+
+                    $callback_return = call_user_func($this->callback_after_insert, $stateParameters);
 
                     if($callback_return === false)
                     {
@@ -1227,6 +1236,11 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
                 if($callback_return === false)
                 {
                     return false;
+                }
+
+                if (is_object($callback_return)) {
+                    $stateParameters = $callback_return;
+                    $primaryKeyValue = $stateParameters->primaryKeyValue;
                 }
 
             }
