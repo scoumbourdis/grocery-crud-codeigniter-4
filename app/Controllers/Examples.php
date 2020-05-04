@@ -44,6 +44,21 @@ class Examples extends BaseController
         return $this->_exampleOutput($output);
     }
 
+    public function products_management() {
+        $crud = new GroceryCrud();
+
+        $crud->setTable('products');
+        $crud->setSubject('Product');
+        $crud->unsetColumns(['productDescription']);
+        $crud->callbackColumn('buyPrice', function ($value) {
+            return $value.' &euro;';
+        });
+
+        $output = $crud->render();
+
+        return $this->_exampleOutput($output);
+    }
+
     private function _exampleOutput($output = null) {
         return view('example', (array)$output);
     }

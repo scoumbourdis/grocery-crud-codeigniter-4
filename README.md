@@ -5,7 +5,46 @@ Grocery CRUD community edition for Codeigniter 4
 
 The installation is really easy. You just copy all the files to your project and you are ready to use grocery CRUD!
 
-By the end of the installation, your folder structure should look similar to this: (new folders/files are bold)
+By the end of the installation, your folder structure should look similar to this: (new folders/files are with bold)
+
+<pre>├── app
+│   ├── Common.php
+│   ├── Config
+│   │   ├── App.php
+│   │   ├── Autoload.php
+│   │   ├── ...
+│   │   ├── Format.php
+│   │   ├── <strong>GroceryCrud.php</strong>
+│   │   ├── Honeypot.php
+│   │   ├── ...
+│   │   └── View.php
+│   ├── Controllers
+│   │   ├── BaseController.php
+│   │   ├── <strong>Examples.php</strong>
+│   │   └── Home.php
+│   ├── Database
+│   ├── ...
+│   ├── Libraries
+│   │   └── <strong>GroceryCrud.php</strong>
+│   ├── Models
+│   │   └── <strong>GroceryCrudModel.php</strong>
+│   ├── ThirdParty
+│   ├── Views
+│   │   ├── errors
+│   │   ├── <strong>example.php</strong>
+│   │   └── welcome_message.php
+│   └── index.html
+├── public
+│   ├── <strong>assets</strong>
+│   │   ├── <strong>grocery_crud</strong>
+│   │   ├── <strong>index.html</strong>
+│   │   └── <strong>uploads</strong>
+│   ├── favicon.ico
+│   ├── index.php
+│   └── robots.txt
+├── spark
+├── system
+└── writable</pre>
 
 ### Default Routes
 
