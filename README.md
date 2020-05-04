@@ -294,6 +294,10 @@ Example with the `use` keyword:
 
 ### callbackColumn
 
+    $crud->callbackColumn('menu_title', function ($value, $row) {
+        return "<a href='" . site_url('menu/' . $row->id) . "'>$value</a>";
+    });
+
 ### callbackDelete
 
     $crud->callbackDelete(function ($stateParameters) {
