@@ -1,11 +1,18 @@
 Grocery CRUD community edition for Codeigniter 4
 =============
 
-## Installation guide
+# Installation guide
 
-Work in progress
+The installation is really easy. You just copy all the files to your project and you are ready to use grocery CRUD!
 
-## Usage example
+By the end of the installation, your folder structure should look similar to this: (new folders/files are bold)
+
+### Default Routes
+
+### Installation Troubleshooting 
+
+
+# Usage example
 
 ### Simplest example
 
@@ -26,7 +33,7 @@ Work in progress
     
     $output = $crud->render();
 
-## API and Functions list
+# API and Functions list
 
 | Function name  | Example | Small description |
 | ------------- | ------------- | ------------- |
@@ -105,7 +112,7 @@ Work in progress
 | callbackReadField  | [Example](#callbackreadfield) | This is a callback in order to create a custom field at the read/view form. |
 | callbackUpdate  | [Example](#callbackupdate) | The callback is used when we need to replace the default update functionality. |
 
-## Examples 
+# Examples 
 
 #### setActionButton
 
@@ -212,7 +219,7 @@ where the function customersSoftDelete at our model is the below:
 ### callbackUpdate
 
 
-## Languages Support
+# Languages Support
 
 So far Grocery CRUD has been translated into 36 languages:
 
@@ -255,21 +262,24 @@ So far Grocery CRUD has been translated into 36 languages:
 
 Thank you all for the support of translating 😄
 
-## Themes support
+# Themes support
 
 - flexigrid (default)
 - datatables
 - bootstrap (only after [purchase](https://www.grocerycrud.com/bootstrap-theme))
 - boostrap-v4 (only after [purchase](https://www.grocerycrud.com/bootstrap-theme))
 
-## Migration from Grocery CRUD v1 to v2 (from Codeigniter 3 to Codeigniter 4)
+# Migration from Grocery CRUD v1 to v2 (from Codeigniter 3 to Codeigniter 4)
 
-Although Grocery CRUD Community v2 was built by having in mind to not change the main logic of Grocery CRUD please have 
-in mind that that it is not a backwards compatible version. We've always been backwards compatible from Codeigniter version
-1 to version 3 but as Codeigniter had changed the approach as well (and we think that they did the right move) 
-Grocery CRUD community edition is following the same direction.
+**TL;DR** Ideally we highly recommend you to start from scratch! The usage logic hasn't change but almost 90% of the 
+functions has!
 
-If you are migrating from version 1 to 2 you will need to consider the below migration notes.  
+**Notice:** Although Grocery CRUD Community v2 was built by having in mind to not change the main logic of Grocery CRUD please have 
+in mind that Grocery CRUD version 2 **is not** backwards compatible. We've always been backwards compatible 
+from Codeigniter version 1 to version 3; however as Codeigniter had changed the approach as well 
+(and we believe that they've made the right choice) Grocery CRUD community edition is following the same direction.
+
+If you are migrating from version 1 to 2 you will need to consider the below migration notes:
 
 ### Renaming of functions
 
