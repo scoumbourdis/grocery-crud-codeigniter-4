@@ -1,6 +1,10 @@
 Grocery CRUD community edition for Codeigniter 4
 =============
 
+## Installation guide
+
+Work in progress
+
 ## Usage example
 
 ### Simplest example
