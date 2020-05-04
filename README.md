@@ -128,9 +128,21 @@ Example with the `use` keyword:
 
 ### callbackAfterDelete
 
-	$crud->callbackAfterDelete(function ($primaryKeyValue) {
-       
-	});
+    $crud->callbackAfterDelete(function ($stateParameters) {
+        /* $stateParameters will be an object with the below structure:
+         * (object)[
+         *      'primaryKeyValue' => '1234'
+         * ]
+         */
+        
+        // Your code here    
+
+        return $stateParameters;
+    });
+    
+⚠️ Warning: Please have in mind that the callbackAfterDelete is called right after the delete operation. This means that:
+ 1. The record that you are looking for with the primary key will not exist if you have a query within the callback
+ 2. If you would like to have a soft delete or not a delete at all then consider also using [callbackDelete](#callbackdelete) as well
 
 
 ### callbackAfterInsert
@@ -148,6 +160,44 @@ Example with the `use` keyword:
 ### callbackColumn
 
 ### callbackDelete
+
+    $crud->callbackDelete(function ($stateParameters) {
+        /* $stateParameters will be an object with the below structure:
+         * (object)[
+         *      'primaryKeyValue' => '1234'
+         * ]
+         */
+        
+        // Your code here
+       
+        return $stateParameters;
+    });
+    
+The most commmon example of usage is the "soft" delete:
+
+    $crud->callbackDelete(function ($stateParameters) {
+
+        $model = new DemoExampleModel();
+
+        // Soft delete
+        $model->customersSoftDelete($stateParameters->primaryKeyValue);
+
+        return $stateParameters;
+    });
+    
+where the function customersSoftDelete at our model is the below:
+
+    /**
+     * Update customer record with deleted = 1 instead of removing the entry from database
+     *
+     * @param string $primaryKeyValue
+     */
+    public function customersSoftDelete($primaryKeyValue) {
+        $this->db->table('customers')->update(
+            ['deleted' => '1'],
+            ['customerNumber' => $primaryKeyValue]);
+    }
+    
 
 ### callbackEditField
 

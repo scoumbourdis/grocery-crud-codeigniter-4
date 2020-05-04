@@ -1204,13 +1204,17 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
 
     protected function db_delete($state_info)
     {
-        $primary_key_value 	= $state_info->primary_key;
+        $primaryKeyValue 	= $state_info->primary_key;
+
+        $stateParameters = (object)[
+            'primaryKeyValue' => $state_info->primary_key
+        ];
 
         if($this->callback_delete === null)
         {
             if($this->callback_before_delete !== null)
             {
-                $callback_return = call_user_func($this->callback_before_delete, $primary_key_value);
+                $callback_return = call_user_func($this->callback_before_delete, $stateParameters);
 
                 if($callback_return === false)
                 {
@@ -1223,11 +1227,11 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
             {
                 foreach($this->relation_n_n as $field_name => $field_info)
                 {
-                    $this->db_relation_n_n_delete( $field_info, $primary_key_value );
+                    $this->db_relation_n_n_delete( $field_info, $primaryKeyValue );
                 }
             }
 
-            $delete_result = $this->basic_model->db_delete($primary_key_value);
+            $delete_result = $this->basic_model->db_delete($primaryKeyValue);
 
             if($delete_result === false)
             {
@@ -1236,7 +1240,7 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
 
             if($this->callback_after_delete !== null)
             {
-                $callback_return = call_user_func($this->callback_after_delete, $primary_key_value);
+                $callback_return = call_user_func($this->callback_after_delete, $stateParameters);
 
                 if($callback_return === false)
                 {
@@ -1247,7 +1251,7 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
         }
         else
         {
-            $callback_return = call_user_func($this->callback_delete, $primary_key_value);
+            $callback_return = call_user_func($this->callback_delete, $stateParameters);
 
             if($callback_return === false)
             {
@@ -4307,6 +4311,12 @@ class GroceryCrud extends grocery_CRUD_States
     public function defaultOrdering($orderBy, $direction = 'asc')
     {
         $this->order_by = [$orderBy, $direction];
+
+        return $this;
+    }
+
+    public function limit($limit, $offset = '') {
+        $this->limit = array($limit,$offset);
 
         return $this;
     }
