@@ -1506,7 +1506,6 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 
         $data->total_results = $this->get_total_results();
 
-        $data->dialog_forms = $this->config->dialog_forms;
         $data->columns 				= $this->get_columns();
 
         $data->success_message		= $this->get_success_message_at_list($state_info);
@@ -1560,8 +1559,6 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 
         if(!$ajax)
         {
-            $this->_add_js_vars(array('dialog_forms' => $this->config->dialog_forms));
-
             $data->list_view = $this->_theme_view('list.php',$data,true);
             $this->_theme_view('list_template.php',$data);
         }
@@ -4401,7 +4398,6 @@ class GroceryCrud extends grocery_CRUD_States
         $this->config->default_text_editor	= $config->default_text_editor;
         $this->config->text_editor_type		= $config->text_editor_type;
         $this->config->character_limiter	= $config->character_limiter;
-        $this->config->dialog_forms			= false;
         $this->config->paging_options		= $config->paging_options;
         $this->config->default_theme        = $config->default_theme;
         $this->config->environment          = $config->environment;

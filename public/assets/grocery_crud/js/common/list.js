@@ -60,18 +60,6 @@ var fnOpenEditForm = function(this_element){
 
 var add_edit_button_listener = function () {
 
-	//If dialog AJAX forms is turned on from grocery CRUD config
-	if (dialog_forms) {
-
-		$('.edit_button,.add_button').unbind('click');
-		$('.edit_button,.add_button').click(function(){
-
-			fnOpenEditForm($(this));
-
-			return false;
-		});
-
-	}
 }
 
 var load_css_file = function(css_file) {

@@ -2,12 +2,6 @@
 	$this->set_css($this->default_theme_path.'/flexigrid/css/flexigrid.css');
 	$this->set_js_lib($this->default_javascript_path.'/' . \App\Libraries\GroceryCrud::JQUERY);
 
-	if ($dialog_forms) {
-        $this->set_js_lib($this->default_javascript_path.'/jquery_plugins/jquery.noty.js');
-        $this->set_js_lib($this->default_javascript_path.'/jquery_plugins/config/jquery.noty.config.js');
-        $this->set_js_lib($this->default_javascript_path.'/common/lazyload-min.js');
-    }
-
     $this->set_js_lib($this->default_javascript_path.'/common/list.js');
 
 	$this->set_js($this->default_theme_path.'/flexigrid/js/cookies.js');

@@ -80,18 +80,20 @@ Below you see an example of a print_r of a variable `$output` :
         [output] => Your output will appear here....
         [js_files] => Array
             (
-                [763b4d272e158bdb8ed5a12a1824c94f494954bd] => http://grocery_crud/public/grocery_crud/themes/datatables/js/jquery-1.6.2.min.js
-                [0b677f3fc6fb25b4baf39eb144222116c5b60254] => http://grocery_crud/public/grocery_crud/themes/flexigrid/js/cookies.js
-                [ec3ae62b8d5838972e858fe54447bd4bd8d79f88] => http://grocery_crud/public/grocery_crud/themes/flexigrid/js/flexigrid.js
-                [2c0ff56d0cbc6f80a5ef9c770d478f0e00c3170d] => http://grocery_crud/public/grocery_crud/themes/flexigrid/js/jquery.form.js
-                [474495ff1e895eab81fb8afba4db9b06c15b19af] => http://grocery_crud/public/grocery_crud/themes/flexigrid/js/jquery.numeric.js
+                [32fd432b4478200b5aacd62b65d5bdc269337910] => http://localhost/grocery-crud-codeigniter-4/public/assets/grocery_crud/js/jquery-1.11.1.min.js
+                [d04ba7f0d55dda1d4ba9b6532414c653c58b0318] => http://localhost/grocery-crud-codeigniter-4/public/assets/grocery_crud/js/common/list.js
+                [2d2b031fb606852768dc4c9a3c457545558cc924] => http://localhost/grocery-crud-codeigniter-4/public/assets/grocery_crud/themes/flexigrid/js/cookies.js
+                [6629a324ade6d489aff77292cb02e31d9188a6bb] => http://localhost/grocery-crud-codeigniter-4/public/assets/grocery_crud/themes/flexigrid/js/flexigrid.js
+                [5238a822ff2c6cced38a61590ac6debcc847bc0b] => http://localhost/grocery-crud-codeigniter-4/public/assets/grocery_crud/js/jquery_plugins/jquery.form.min.js
+                [41101518af3f8fb416f60152aa019d963ae9293b] => http://localhost/grocery-crud-codeigniter-4/public/assets/grocery_crud/js/jquery_plugins/jquery.numeric.min.js
+                [8823261dedf8eda49cfa2a7a528b5182350a90ae] => http://localhost/grocery-crud-codeigniter-4/public/assets/grocery_crud/themes/flexigrid/js/jquery.printElement.min.js
+                [2ea588263ae884c476a96f40dc6cedd5316bbd57] => http://localhost/grocery-crud-codeigniter-4/public/assets/grocery_crud/js/jquery_plugins/ui/jquery-ui-1.10.3.custom.min.js
             )
-    
         [css_files] => Array
             (
-                [732b03aa54d124f062757b71e5560acdc5632ba6] => http://grocery_crud/public/grocery_crud/themes/flexigrid/css/flexigrid.css
+                [f1731e27afe02ab899b16daf8ae4a5ac8ac05d4e] => http://localhost/grocery-crud-codeigniter-4/public/assets/grocery_crud/themes/flexigrid/css/flexigrid.css
+                [3e3f44ffabdcdd9017fa9db5262ce0465dde1322] => http://localhost/grocery-crud-codeigniter-4/public/assets/grocery_crud/css/ui/simple/jquery-ui-1.10.1.custom.min.css
             )
-    
     )
     
 The view at `app/Views/example.php` is a simple Codeigniter view file and includes the below code:
