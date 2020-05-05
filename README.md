@@ -46,6 +46,88 @@ By the end of the installation, your folder structure should look similar to thi
 ├── system
 └── writable</pre>
 
+The app/Controllers/Examples.php will look like this:
+
+	<?php namespace App\Controllers;
+
+	use App\Libraries\GroceryCrud;
+
+	class Examples extends BaseController
+	{
+		public function customers_management()
+		{
+		    $crud = new GroceryCrud();
+
+		    $crud->setTable('customers');
+
+		    $output = $crud->render();
+
+			return $this->_exampleOutput($output);
+		}
+
+	    private function _exampleOutput($output = null) {
+	        return view('example', (array)$output);
+	    }
+
+
+	}
+
+The only required configurations is to add your database credentials into a .env file  if you haven't already done that.
+
+The variable $output is an object that always includes the following properties - output, js_files, css_files. 
+Below you see an example of a print_r of a variable `$output` :
+
+    stdClass Object
+    (
+        [output] => Your output will appear here....
+        [js_files] => Array
+            (
+                [763b4d272e158bdb8ed5a12a1824c94f494954bd] => http://grocery_crud/public/grocery_crud/themes/datatables/js/jquery-1.6.2.min.js
+                [0b677f3fc6fb25b4baf39eb144222116c5b60254] => http://grocery_crud/public/grocery_crud/themes/flexigrid/js/cookies.js
+                [ec3ae62b8d5838972e858fe54447bd4bd8d79f88] => http://grocery_crud/public/grocery_crud/themes/flexigrid/js/flexigrid.js
+                [2c0ff56d0cbc6f80a5ef9c770d478f0e00c3170d] => http://grocery_crud/public/grocery_crud/themes/flexigrid/js/jquery.form.js
+                [474495ff1e895eab81fb8afba4db9b06c15b19af] => http://grocery_crud/public/grocery_crud/themes/flexigrid/js/jquery.numeric.js
+            )
+    
+        [css_files] => Array
+            (
+                [732b03aa54d124f062757b71e5560acdc5632ba6] => http://grocery_crud/public/grocery_crud/themes/flexigrid/css/flexigrid.css
+            )
+    
+    )
+    
+The view at `app/Views/example.php` is a simple Codeigniter view file and includes the below code:
+
+	<!DOCTYPE html>
+	<html>
+	<head>
+		<meta charset="utf-8" />
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<?php 
+	foreach($css_files as $file): ?>
+		<link type="text/css" rel="stylesheet" href="<?php echo $file; ?>" />
+	<?php endforeach; ?>
+	</head>
+	<body>
+		<div>
+			<a href='<?php echo site_url('examples/customers_management')?>'>Customers</a> |
+			<a href='<?php echo site_url('examples/orders_management')?>'>Orders</a> |
+			<a href='<?php echo site_url('examples/products_management')?>'>Products</a> |
+			<a href='<?php echo site_url('examples/offices_management')?>'>Offices</a> | 
+			<a href='<?php echo site_url('examples/employees_management')?>'>Employees</a> |		 
+			<a href='<?php echo site_url('examples/film_management')?>'>Films</a>
+		</div>
+		<div style='height:20px;'></div>  
+	    <div style="padding: 10px">
+			<?php echo $output; ?>
+	    </div>
+	    <?php foreach($js_files as $file): ?>
+	        <script src="<?php echo $file; ?>"></script>
+	    <?php endforeach; ?>
+	</body>
+	</html>
+
+    
 ### Default Routes
 
 ### Installation Troubleshooting 
@@ -310,6 +392,10 @@ Example with the `use` keyword:
 
 ### callbackCloneField
 
+    $crud->callbackCloneField('telephone_number', function ($fieldValue, $primaryKeyValue, $rowData) {
+        return '+30 <input name="telephone_number" value="' . $fieldValue . '"  />';
+    });
+
 ### callbackColumn
 
     $crud->callbackColumn('menu_title', function ($value, $row) {
@@ -358,6 +444,10 @@ where the function customersSoftDelete at our model is the below:
 
 ### callbackEditField
 
+    $crud->callbackEditField('telephone_number', function ($fieldValue, $primaryKeyValue, $rowData) {
+        return '+30 <input name="telephone_number" value="' . $fieldValue . '"  />';
+    });
+
 ### callbackInsert
 
     $crud->callbackInsert(function ($stateParameters) {
@@ -383,6 +473,10 @@ where the function customersSoftDelete at our model is the below:
     });
 
 ### callbackReadField
+
+    $crud->callbackReadField('contact_telephone_number', function ($fieldValue, $primaryKeyValue, $rowData) {
+        return '+30 ' . $fieldValue;
+    });
 
 ### callbackUpdate
 

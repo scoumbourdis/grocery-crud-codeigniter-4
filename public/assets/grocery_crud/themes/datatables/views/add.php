@@ -3,8 +3,8 @@
 	$this->set_css($this->default_theme_path.'/datatables/css/datatables.css');
     $this->set_js_lib($this->default_javascript_path.'/jquery_plugins/jquery.form.min.js');
 	$this->set_js_config($this->default_theme_path.'/datatables/js/datatables-add.js');
-	$this->set_css($this->default_css_path.'/ui/simple/'.\App|Libraries\GroceryCrud::JQUERY_UI_CSS);
-	$this->set_js_lib($this->default_javascript_path.'/jquery_plugins/ui/'.\App|Libraries\GroceryCrud::JQUERY_UI_JS);
+	$this->set_css($this->default_css_path.'/ui/simple/'.\App\Libraries\GroceryCrud::JQUERY_UI_CSS);
+	$this->set_js_lib($this->default_javascript_path.'/jquery_plugins/ui/'.\App\Libraries\GroceryCrud::JQUERY_UI_JS);
 
 	$this->set_js_lib($this->default_javascript_path.'/jquery_plugins/jquery.noty.js');
 	$this->set_js_lib($this->default_javascript_path.'/jquery_plugins/config/jquery.noty.config.js');
