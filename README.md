@@ -54,22 +54,20 @@ The app/Controllers/Examples.php will look like this:
 
 	class Examples extends BaseController
 	{
-		public function customers_management()
-		{
-		    $crud = new GroceryCrud();
+        public function customers_management()
+	    {
+	        $crud = new GroceryCrud();
 
-		    $crud->setTable('customers');
+            $crud->setTable('customers');
 
-		    $output = $crud->render();
+            $output = $crud->render();
 
-			return $this->_exampleOutput($output);
-		}
+            return $this->_exampleOutput($output);
+	    }
 
 	    private function _exampleOutput($output = null) {
 	        return view('example', (array)$output);
 	    }
-
-
 	}
 
 The only required configurations is to add your database credentials into a .env file  if you haven't already done that.
@@ -101,8 +99,8 @@ The view at `app/Views/example.php` is a simple Codeigniter view file and includ
 	<!DOCTYPE html>
 	<html>
 	<head>
-		<meta charset="utf-8" />
-	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<?php 
 	foreach($css_files as $file): ?>
 		<link type="text/css" rel="stylesheet" href="<?php echo $file; ?>" />
@@ -110,12 +108,12 @@ The view at `app/Views/example.php` is a simple Codeigniter view file and includ
 	</head>
 	<body>
 		<div>
-			<a href='<?php echo site_url('examples/customers_management')?>'>Customers</a> |
-			<a href='<?php echo site_url('examples/orders_management')?>'>Orders</a> |
-			<a href='<?php echo site_url('examples/products_management')?>'>Products</a> |
-			<a href='<?php echo site_url('examples/offices_management')?>'>Offices</a> | 
-			<a href='<?php echo site_url('examples/employees_management')?>'>Employees</a> |		 
-			<a href='<?php echo site_url('examples/film_management')?>'>Films</a>
+		    <a href='<?php echo site_url('examples/customers_management')?>'>Customers</a> |
+		    <a href='<?php echo site_url('examples/orders_management')?>'>Orders</a> |
+		    <a href='<?php echo site_url('examples/products_management')?>'>Products</a> |
+		    <a href='<?php echo site_url('examples/offices_management')?>'>Offices</a> | 
+		    <a href='<?php echo site_url('examples/employees_management')?>'>Employees</a> |		 
+		    <a href='<?php echo site_url('examples/film_management')?>'>Films</a>
 		</div>
 		<div style='height:20px;'></div>  
 	    <div style="padding: 10px">
