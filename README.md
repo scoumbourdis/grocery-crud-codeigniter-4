@@ -217,6 +217,24 @@ Example with the `use` keyword:
 
 ### callbackAfterUpdate
 
+    $crud->callbackAfterUpdate(function ($stateParameters) {
+        /* $stateParameters will be an object with the below structure:
+         * (object)[
+         *      'data' => [ 
+         *            // Your posted data
+         *            'customer_fist_name' => 'John',
+         *            'customer_last_name' => 'Smith',
+         *            ... 
+         *      ],
+         *      'primaryKeyValue' => '1234',
+         * ]
+         */
+    
+        // Your code goes here.
+    
+        return $stateParameters;
+    });
+
 ### callbackBeforeDelete
 
         $crud->callbackBeforeDelete(function ($stateParameters) use ($userId) {

@@ -1122,7 +1122,12 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
 
                 if($this->callback_after_update !== null)
                 {
-                    $callbackReturn = call_user_func($this->callback_after_update, $post_data, $primary_key);
+                    $stateParameters = (object)[
+                        'primaryKeyValue' => $primary_key,
+                        'data' => $post_data
+                    ];
+
+                    $callbackReturn = call_user_func($this->callback_after_update, $stateParameters);
 
                     if($callbackReturn === false)
                     {
