@@ -72,6 +72,14 @@ The app/Controllers/Examples.php will look like this:
 
 The only required configurations is to add your database credentials into a .env file  if you haven't already done that.
 
+In order to access the URL file for customers_management your URL will look something like this:
+
+http://www.example.com/index.php/examples/customers_management
+
+or:
+
+http://www.example.com/examples/customers_management
+
 The variable $output is an object that always includes the following properties - output, js_files, css_files. 
 Below you see an example of a print_r of a variable `$output` :
 
