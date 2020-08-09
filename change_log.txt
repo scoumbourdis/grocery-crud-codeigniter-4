@@ -1,3 +1,5 @@
+v2.0.0
+    - Creation of a stable release
 v2.0.0-BETA.1
     - #8: Fixing issue with languages forced to be lowercase
 v2.0.0-BETA
