@@ -7,7 +7,7 @@ class GroceryCrud
      * For view all the languages go to the folder assets/grocery_crud/languages/
      * @var string
      */
-    public $default_language = 'english';
+    public $default_language = 'English';
 
     /**
      * There are only three choices: "uk-date" (dd/mm/yyyy), "us-date" (mm/dd/yyyy) or "sql-date" (yyyy-mm-dd)

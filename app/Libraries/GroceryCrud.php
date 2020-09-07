@@ -2215,7 +2215,7 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
         $this->set_js_lib($this->default_javascript_path.'/jquery_plugins/ui/'.GroceryCrud::JQUERY_UI_JS);
         $this->set_js_lib($this->default_javascript_path.'/jquery_plugins/jquery-ui-timepicker-addon.js');
 
-        if($this->language !== 'english')
+        if($this->language !== 'English')
         {
             include($this->default_config_path.'/language_alias.php');
             if(array_key_exists($this->language, $language_alias))
@@ -2275,7 +2275,7 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
         $this->set_css($this->default_css_path.'/ui/simple/'.GroceryCrud::JQUERY_UI_CSS);
         $this->set_js_lib($this->default_javascript_path.'/jquery_plugins/ui/'.GroceryCrud::JQUERY_UI_JS);
 
-        if($this->language !== 'english')
+        if($this->language !== 'English')
         {
             include($this->default_config_path.'/language_alias.php');
             if(array_key_exists($this->language, $language_alias))
