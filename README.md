@@ -220,7 +220,7 @@ The view at `app/Views/example.php` is a simple Codeigniter view file and includ
 | unsetRead | ```$crud->unsetRead();``` | The method unsetRead is removing completely the Read operation for the end-user. |
 | unsetReadFields | ```$crud->unsetReadFields(['address_1', 'address_2', 'credit_limit']);``` | Unset (do not display) the specified fields for the view (read only) form. |
 | unsetTexteditor  | ```$crud->unsetTexteditor(['description', 'full_description']);``` |  Unsets the texteditor for the selected fields. This function is really rare to use as by default there is not any load of the texteditor for optimising purposes. |
-| where  | ```$crud->like('country', 'USA');``` | Filter the queries with an extra where statement. |
+| where  | ```$crud->where('country', 'USA');``` | Filter the queries with an extra where statement. |
 
 ### Callback Functionality (Changing or enhancing the default behavior with callbacks)
 
